@@ -1,0 +1,3 @@
+[submodule "filters/clean-each-ipynb"]
+	path = filters/clean-each-ipynb
+	url = https://github.com/lduran2/git-clean-each-ipynb
