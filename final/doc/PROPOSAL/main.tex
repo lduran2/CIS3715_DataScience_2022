@@ -9,16 +9,36 @@
 \usepackage{setspace}
 \singlespacing
 
+\usepackage{hyperref}
+
+% flushes heading numbers into the margin
 \usepackage{titlesec}
 \titlelabel{\llap{\thetitle\quad}}
 \newcommand*\dorepeatoptwith[3]{#1[#2]{#2#3}}
+
+% for loading the bibliography
+\usepackage[
+    style=ieee
+]{biblatex}
+\addbibresource{main.bib}
+\defbibheading{bibliography}[\refname]{%
+  \section{#1}%
+}%
+
+% macros for delimiters in text
+\newcommand*\DeclareTextPairedDelimiters[3]{%
+    \newcommand*#1[1]{#2##1#3}%
+}
+\DeclareTextPairedDelimiters\tbrao()
+\DeclareTextPairedDelimiters\tangle{\(<\)}{\(>\)}
 
 \begin{document}
 
 \section{Project title and student names}
 \begin{itemize}
     \item
-        \textbf{Project title:} Using satellite imagery to train a model for identifying the type of landmarks.
+        \textbf{Project title:}
+        Using satellite imagery to train a model for identifying the type of landmarks.
     \item
         \textbf{Student names} (1)
         \begin{itemize}
@@ -31,14 +51,32 @@
 
 \subsection{Motivation}
 
-The sciences of geomatics and land surveying interest me as hobbies. I really enjoy the idea of collecting data about the terrain, whether it be rural or urban, and working with that data to find solutions to problems or even just for fun.
+The sciences of geomatics and land surveying interest me as hobbies.
+I really enjoy the idea of collecting data about the terrain,
+whether it be rural or urban,
+and working with that data to find solutions to problems
+or even just for fun.
 
 \subsection{Problem}
+
+We are given
+The SAT-4 airborne dataset%
+\cite{Basu2015a}.
+The data is hosted by the Louisiana State University's Division of Computer Science and Engineering%
+\footnote{%
+    \tangle{\url{http://csc.lsu.edu/~saikat/deepsat/}}%
+},
+and it can be downloaded directly from the Google Drive%
+\footnote{%
+    \tangle{\url{https://drive.google.com/u/0/uc?export=download&confirm=sWVM&id=0B0Fef71_vt3PUkZ4YVZ5WWNvZWs}}%
+}
+along with the SAT-6 airborne dataset.
 
 \subsection{Related works}
 
 \section{Proposed work section}
 \section{Timeline}
-\section{References}
+
+\printbibliography
 
 \end{document}
