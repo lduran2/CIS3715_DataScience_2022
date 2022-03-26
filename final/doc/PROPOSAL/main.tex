@@ -11,10 +11,14 @@
 
 \usepackage{hyperref}
 
+\usepackage{tabularx}
+\usepackage{booktabs}
+\newcommand*\ra[1]{\renewcommand*\arraystretch{#1}}%
+\ra{1.27273}
+
 % flushes heading numbers into the margin
 \usepackage{titlesec}
 \titlelabel{\llap{\thetitle\quad}}
-\newcommand*\dorepeatoptwith[3]{#1[#2]{#2#3}}
 
 % for loading the bibliography
 \usepackage[
@@ -54,6 +58,54 @@
                 Leomar Durán
         \end{itemize}
 \end{itemize}
+
+\section{Revision History}
+
+\begin{tabularx}\linewidth{@{}rlrX@{}}
+    \toprule
+        Revision \#
+            & Author
+            & Revision date
+            & Comments
+    \\*
+    \midrule
+        1.6.0
+            & Leomar Durán
+            & 2022-03-25t22:16
+            & added revision history
+    \\*
+        1.5.0
+            & Leomar Durán
+            & 2022-03-25t21:47
+            & added more about the dataset, grammatical fixes
+    \\*
+        1.4.0
+            & Leomar Durán
+            & 2022-03-25t02:45
+            & started bibliograph, problem statement
+    \\*
+        1.3.0
+            & Leomar Durán
+            & 2022-03-25t02:10
+            & motivation, flushed heading numbers into margin
+    \\*
+        1.2.0
+            & Leomar Durán
+            & 2022-03-25t02:05
+            & sections, title, students
+    \\*
+        1.1.0
+            & Leomar Durán
+            & 2022-03-25t01:55
+            & page specifications
+    \\*
+        1.0.0
+            & Leomar Durán
+            & 2022-03-25t01:51
+            & starting proposal
+    \\*
+    \bottomrule
+\end{tabularx}
 
 \section{Introduction section}
 
