@@ -6,11 +6,19 @@
 \author{Leomar Durán}
 \date{March 2022}
 
+% line spacing, paragraph indentation
 \usepackage{setspace}
 \singlespacing
+\setlength\parindent{0.25in}
 
+% hyperlinks
 \usepackage{hyperref}
 
+% remove level 1 margin on any list
+\usepackage{enumitem}
+\setlist[1]{leftmargin=0in}
+
+% table width, rules, row spacing
 \usepackage{tabularx}
 \usepackage{booktabs}
 \newcommand*\ra[1]{\renewcommand*\arraystretch{#1}}%
@@ -46,7 +54,7 @@
 
 \begin{document}
 
-\section{Project title and student names}
+\section*{Project title and student names}
 \begin{itemize}
     \item
         \textbf{Project title:}
@@ -59,7 +67,7 @@
         \end{itemize}
 \end{itemize}
 
-\section{Revision History}
+\section*{Revision History}
 
 \begin{tabularx}\linewidth{@{}rlrX@{}}
     \toprule
@@ -69,6 +77,16 @@
             & Comments
     \\*
     \midrule
+        1.8.0
+            & Leomar Durán
+            & 2022-03-25t22:31
+            & finished overview of problem, flush level 1 lists
+    \\*
+        1.7.0
+            & Leomar Durán
+            & 2022-03-25t22:19
+            & moved description of dataset to proposed work
+    \\*
         1.6.0
             & Leomar Durán
             & 2022-03-25t22:16
@@ -117,7 +135,18 @@ whether it be rural or urban,
 and working with that data to find solutions to problems
 or even just for fun.
 
-\subsection{Problem}
+\subsection{The Problem}
+
+An image of a terrain is given to a computer which will make a decision on the fly based on the type of terrain.
+We will train a model that will be used by the computer to identify this terrain.
+
+This sort of decision might be involved in deciding if the terrain would be appropriate for developing a building thereon.
+A preliminary sweep by a machine may save on costs of having an engineer waste time looking for land to develop.
+Another example of making this decision may be helpful for automatic landing software that will be used to safely land aircraft on stable terrain.
+
+\subsection{Related works}
+
+\section{Proposed work}
 
 We are given
 The SAT-4 airborne dataset%
@@ -140,9 +169,6 @@ According to \textcite{Basu2015a},
 these tiles represent ``different landscapes like rural areas, urban areas, densely forested, mountainous terrain, small to large water bodies",
 so these as a disjoint set of landscapes would make for appropriate labels.
 
-\subsection{Related works}
-
-\section{Proposed work section}
 \section{Timeline}
 
 \printbibliography
