@@ -15,7 +15,7 @@
 \usepackage{hyperref}
 
 % remove level 1 margin on any list
-\usepackage{enumitem}
+\usepackage[inline]{enumitem}
 \setlist[1]{leftmargin=0in}
 
 % table width, rules, row spacing
@@ -29,8 +29,8 @@
 \titlelabel{\llap{\thetitle\quad}}
 
 % for loading the bibliography
-\usepackage[
-    style=ieee
+\usepackage[%
+    style=ieee%
 ]{biblatex}
 \addbibresource{main.bib}
 \defbibheading{bibliography}[\refname]{%
@@ -38,8 +38,14 @@
 }%
 
 % SI units, added pixels
-\usepackage[group-separator={,},per-mode=symbol]{siunitx}
+\usepackage[%
+    group-separator={,},%
+    per-mode=symbol,%
+    parse-numbers=false%
+]{siunitx}
 \DeclareSIUnit\pixel{px}
+\DeclareSIUnit\example{examples}
+\DeclareSIUnit\channel{channels}
 
 % math delimiters
 \usepackage{mathtools}%
@@ -77,6 +83,11 @@
             & Comments
     \\*
     \midrule
+        1.9.0
+            & Leomar Durán
+            & 2022-03-25t22:31
+            & data science fundamentals, project objective and constraints
+    \\*
         1.8.0
             & Leomar Durán
             & 2022-03-25t22:31
@@ -137,12 +148,39 @@ or even just for fun.
 
 \subsection{The Problem}
 
+\subsubsection{Overview}
+
 An image of a terrain is given to a computer which will make a decision on the fly based on the type of terrain.
 We will train a model that will be used by the computer to identify this terrain.
 
 This sort of decision might be involved in deciding if the terrain would be appropriate for developing a building thereon.
 A preliminary sweep by a machine may save on costs of having an engineer waste time looking for land to develop.
 Another example of making this decision may be helpful for automatic landing software that will be used to safely land aircraft on stable terrain.
+
+\subsubsection{Data science fundamentals}
+
+This problem involves multi-class classification.
+We will classify the terrain according to features such as whether the area is
+urban, densely forested, mountainous, or contains water
+for \(4\) disjoint classes.
+
+We will evaluate the results using
+accuracy, recall, precision and the F1 score.
+
+\subsubsection{Project objective and constraints}
+
+For this project, we hope to train a model to learn different \(4\) disjoint classes of terrain, and then classify a test sample.
+
+The algorithm that we pick has to deal well with the curse of dimensionality,
+as there will be
+\(
+    \SI{\brao{28\times28}\!}{\pixel\per\example}
+    \times \SI4{\channel\per\pixel}
+    = \SI{3136}{\channel\per\example}
+\).
+
+Ideally the solution would also perform well for multiple clases,
+but this is less of an issue than dimensionality.
 
 \subsection{Related works}
 
