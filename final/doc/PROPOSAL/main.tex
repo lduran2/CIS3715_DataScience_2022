@@ -40,12 +40,12 @@
 % SI units, added pixels
 \usepackage[%
     group-separator={,},%
-    per-mode=symbol,%
-    parse-numbers=false%
+    per-mode=symbol%
 ]{siunitx}
 \DeclareSIUnit\pixel{px}
 \DeclareSIUnit\example{examples}
 \DeclareSIUnit\channel{channels}
+\DeclareSIUnit\byte{byte}
 
 % math delimiters
 \usepackage{mathtools}%
@@ -83,9 +83,14 @@
             & Comments
     \\*
     \midrule
+        1.10.0
+            & Leomar Durán
+            & 2022-03-25t23:57
+            & design and implementation challenges, started anticipated project outcomes and impacts
+    \\*
         1.9.0
             & Leomar Durán
-            & 2022-03-25t22:31
+            & 2022-03-25t23:46
             & data science fundamentals, project objective and constraints
     \\*
         1.8.0
@@ -156,6 +161,8 @@ We will train a model that will be used by the computer to identify this terrain
 This sort of decision might be involved in deciding if the terrain would be appropriate for developing a building thereon.
 A preliminary sweep by a machine may save on costs of having an engineer waste time looking for land to develop.
 Another example of making this decision may be helpful for automatic landing software that will be used to safely land aircraft on stable terrain.
+A third example is that combined with time series data, we can predict different types of natural weather-related phenomena,
+such as draughts, floods and earthquakes.
 
 \subsubsection{Data science fundamentals}
 
@@ -174,7 +181,7 @@ For this project, we hope to train a model to learn different \(4\) disjoint cla
 The algorithm that we pick has to deal well with the curse of dimensionality,
 as there will be
 \(
-    \SI{\brao{28\times28}\!}{\pixel\per\example}
+    \SI[parse-numbers=false]{\brao{28\times28}\!}{\pixel\per\example}
     \times \SI4{\channel\per\pixel}
     = \SI{3136}{\channel\per\example}
 \).
@@ -206,6 +213,22 @@ multiplied by the channels for red, green, blue and near infrared \tbrao{NIR}.
 According to \textcite{Basu2015a},
 these tiles represent ``different landscapes like rural areas, urban areas, densely forested, mountainous terrain, small to large water bodies",
 so these as a disjoint set of landscapes would make for appropriate labels.
+
+Our proposed solution is a multi-class logistic regression.
+
+\subsection{Design and implementation challenges}
+
+A challenge to this solution is the size of the dataset.
+Because of its size \tbrao{about \(\SI3{\giga\byte}\)}, we expect long processing times.
+One possible solution to this challenge may be to reduce the datasize
+from \(\num{400000}\) to a more reasonable number such as
+\(\num{20000}\).
+
+Another issue that we will run into is deciding the best way to split the classes for the multi-class classification.
+
+\subsection{Anticipated project outcomes and impacts}
+
+An anticipated outcome is a model that can identify the types of terrains accurately from the given dataset.
 
 \section{Timeline}
 
