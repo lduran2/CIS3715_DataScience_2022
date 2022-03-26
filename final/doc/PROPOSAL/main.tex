@@ -25,12 +25,20 @@
   \section{#1}%
 }%
 
+% SI units, added pixels
+\usepackage[group-separator={,},per-mode=symbol]{siunitx}
+\DeclareSIUnit\pixel{px}
+
+% math delimiters
+\usepackage{mathtools}%
+\DeclarePairedDelimiter\brao()%
+
 % macros for delimiters in text
 \newcommand*\DeclareTextPairedDelimiters[3]{%
     \newcommand*#1[1]{#2##1#3}%
 }
-\DeclareTextPairedDelimiters\tbrao()
-\DeclareTextPairedDelimiters\tangle{\(<\)}{\(>\)}
+\DeclareTextPairedDelimiters\tbrao()%
+\DeclareTextPairedDelimiters\tangle{\(<\)}{\(>\)}%
 
 \begin{document}
 
@@ -62,15 +70,23 @@ or even just for fun.
 We are given
 The SAT-4 airborne dataset%
 \cite{Basu2015a}.
-The data is hosted by the Louisiana State University's Division of Computer Science and Engineering%
+This data is hosted by the Louisiana State University's Division of Computer Science and Engineering%
 \footnote{%
     \tangle{\url{http://csc.lsu.edu/~saikat/deepsat/}}%
-},
-and it can be downloaded directly from the Google Drive%
+}
+and can be downloaded directly from the Google Drive%
 \footnote{%
     \tangle{\url{https://drive.google.com/u/0/uc?export=download&confirm=sWVM&id=0B0Fef71_vt3PUkZ4YVZ5WWNvZWs}}%
 }
 along with the SAT-6 airborne dataset.
+
+The dataset consists of \(\num{400000}\) example tiles
+taken from satellite imagery originally from the National Agriculture Imagery Program \tbrao{NAIP} dataset.
+Each sample has features representing the pixels of a \(\SI[parse-numbers=false]{\brao{28\times28}\!}\pixel\) image 
+multiplied by the channels for red, green, blue and near infrared \tbrao{NIR}.
+According to \textcite{Basu2015a},
+these tiles represent ``different landscapes like rural areas, urban areas, densely forested, mountainous terrain, small to large water bodies",
+so these as a disjoint set of landscapes would make for appropriate labels.
 
 \subsection{Related works}
 
