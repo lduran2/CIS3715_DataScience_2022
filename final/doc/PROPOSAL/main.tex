@@ -56,6 +56,7 @@
     \newcommand*#1[1]{#2##1#3}%
 }
 \DeclareTextPairedDelimiters\tbrao()%
+\DeclareTextPairedDelimiters\tbrac[]%
 \DeclareTextPairedDelimiters\tangle{\(<\)}{\(>\)}%
 
 \begin{document}
@@ -191,6 +192,23 @@ but this is less of an issue than dimensionality.
 
 \subsection{Related works}
 
+One of the historical approaches to this problem is that by \textcite{Basu2015a} themselves,
+who
+used a combination of computer vision and neural networks.
+
+\textcite{IBM2020a} compares computer vision with human sight as well as artificial intelligence,
+making the analogy that computer vision is to seeing as artificial intelligence is to thinking.
+
+However, \textcite{IBM2020a} also clarifies the disadvantages of computer vision to traditional machine learning models.
+Specifically, ``\tbrac{c}omputer vision needs lots of data. It runs analyses of data over and over until it discerns distinctions and ultimately recognize images.''
+That is to say that computer vision has high time and spatial complexity.
+Because of the amounts of data required,
+it will require much storage,
+and the same compounded by the number of iterations that must be performed,
+training a computer vision model will require much more time.
+IBM explains that the scale needed for time and storage is such that few organizations have the necessary infrastructure,
+and as a result, many use a service such as IBM's to perform computer vision \cite{IBM2020a}.
+
 \section{Proposed work}
 
 We are given
@@ -221,7 +239,7 @@ Our proposed solution is a multi-class logistic regression.
 A challenge to this solution is the size of the dataset.
 Because of its size \tbrao{about \(\SI3{\giga\byte}\)}, we expect long processing times.
 One possible solution to this challenge may be to reduce the datasize
-from \(\num{400000}\) to a more reasonable number such as
+from \(\num{400000}\) to a more managable number such as
 \(\num{20000}\).
 
 Another issue that we will run into is deciding the best way to split the classes for the multi-class classification.
