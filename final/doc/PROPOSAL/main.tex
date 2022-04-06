@@ -23,6 +23,10 @@
 \usepackage{booktabs}
 \newcommand*\ra[1]{\renewcommand*\arraystretch{#1}}%
 \ra{1.27273}
+% long tables
+\usepackage{tabularray}
+\UseTblrLibrary{booktabs}
+\usepackage{longtable}
 
 % flushes heading numbers into the margin
 \usepackage{titlesec}
@@ -76,7 +80,13 @@
 
 \section*{Revision History}
 
-\begin{tabularx}\linewidth{@{}rlrX@{}}
+\begin{tblr}[%
+    long,%
+    caption = {Revision history}%
+]{%
+    width=\linewidth,%
+    colspec={@{}rlrX@{}}%
+}
     \toprule
         Revision \#
             & Author
@@ -84,6 +94,11 @@
             & Comments
     \\*
     \midrule
+        1.14.0
+            & Leomar Durán
+            & 2022-04-06t04:32
+            & initial time line
+    \\*
         1.13.0
             & Leomar Durán
             & 2022-04-06t02:40
@@ -155,7 +170,7 @@
             & starting proposal
     \\*
     \bottomrule
-\end{tabularx}
+\end{tblr}
 
 \section{Introduction section}
 
@@ -293,6 +308,43 @@ Another issue that we will run into is deciding the best way to split the classe
 An anticipated outcome is a model that can identify the types of terrains accurately from the given dataset.
 
 \section{Timeline}
+\begin{tblr}[%
+    long,%
+    caption = {Time line}%
+]{%
+    width=\linewidth,%
+    colspec={@{}Xl@{}}%
+}
+\toprule
+    Objective & Due Date
+\\*
+\midrule
+    data set research & 2022-03-24
+\\*
+    initial proposal & 2022-03-25
+\\*
+    proposal revising & 2022-04-06
+\\*
+    initial data understanding, visualization & 2022-04-06
+\\*
+    progress report I revising & 2022-04-06
+\\*
+    pre-processing of data & 2022-04-08
+\\*
+    progress report II & 2022-04-09
+\\*
+    experimenting with logistic regression hyper parameters & 2022-04-15
+\\*
+    lightning talks & 2022-04-19
+\\*
+    revising presentation of results & 2022-04-22
+\\*
+    working on final report & 2022-04-23
+\\*
+    \(\prime\prime\)& 2022-04-04
+\\*
+\bottomrule
+\end{tblr}
 
 \printbibliography
 
