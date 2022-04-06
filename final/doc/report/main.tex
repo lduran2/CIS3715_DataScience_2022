@@ -1,10 +1,12 @@
-\documentclass[11pt]{article}
+\documentclass[11pt]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[margin=1.0in]{geometry}
+\usepackage[titlepage]{lib/makesubtitle}
 
-\title{CIS 3715 Final Project Proposal}
+\title{CIS 3715 Final Project Report}
+\subtitle{Using satellite imagery to train a model for identifying the type of landmarks.}
 \author{Leomar Durán}
-\date{March 2022}
+\date{April 2022}
 
 % line spacing, paragraph indentation
 \usepackage{setspace}
@@ -24,13 +26,15 @@
 \newcommand*\ra[1]{\renewcommand*\arraystretch{#1}}%
 \ra{1.27273}
 % long tables
+\usepackage{longtable}
 \usepackage{tabularray}
 \UseTblrLibrary{booktabs}
-\usepackage{longtable}
 
 % flushes heading numbers into the margin
 \usepackage{titlesec}
 \titlelabel{\llap{\thetitle\quad}}
+% remove chapter numbers from sections
+\renewcommand*\thesection{\arabic{section}}
 
 % for loading the bibliography
 \usepackage[%
@@ -65,20 +69,9 @@
 
 \begin{document}
 
-\section*{Project title and student names}
-\begin{itemize}
-    \item
-        \textbf{Project title:}
-        Using satellite imagery to train a model for identifying the type of landmarks.
-    \item
-        \textbf{Student names} \tbrao{\(1\)}
-        \begin{itemize}
-            \item
-                Leomar Durán
-        \end{itemize}
-\end{itemize}
+\maketitle
 
-\section*{Revision History}
+\chapter*{Revision History}
 
 \begin{tblr}[%
     long,%
@@ -94,6 +87,11 @@
             & Comments
     \\*
     \midrule
+        2.0.0
+            & Leomar Durán
+            & 2022-04-06t12:30
+            & lessons learned from past work, started progress report
+    \\*
         1.14.0
             & Leomar Durán
             & 2022-04-06t04:32
@@ -171,6 +169,23 @@
     \\*
     \bottomrule
 \end{tblr}
+
+\part{Progress Report I}
+
+\part{Final Project Proposal}
+
+\section*{Project title and student names}
+\begin{itemize}
+    \item
+        \textbf{Project title:}
+        Using satellite imagery to train a model for identifying the type of landmarks.
+    \item
+        \textbf{Student names} \tbrao{\(1\)}
+        \begin{itemize}
+            \item
+                Leomar Durán
+        \end{itemize}
+\end{itemize}
 
 \section{Introduction section}
 
@@ -265,8 +280,16 @@ such as different in phase of the object being imaged,
 differences in lighting,
 and differences in positioning.
 The other issue is that convolutional neural networks are sensitive to even low levels of additive Gaussian white noise.
-Unfortunately, without modulation and a method to demodulate the signal of the image,
-it is very difficult to remove white noise.
+% Unfortunately, without modulation and a method to demodulate the signal of the image,
+% it is very difficult to remove white noise.
+
+To satisfy what we have learned from past systems,
+we will work from the bottom up using a simpler system that will not overfit,
+iterating until we find the lowest system that will have good performance.
+This will also solve the issue of noise because this problem is complicated by overfitting.
+As for position and phase of the image, this is a much different problem to tackle and outside of the scope of this project.
+However, if the image were more more regular and you could expect a guideline,
+it could be used to properly orient the image using a rotation matrix.
 
 \section{Proposed work}
 
@@ -308,43 +331,48 @@ Another issue that we will run into is deciding the best way to split the classe
 An anticipated outcome is a model that can identify the types of terrains accurately from the given dataset.
 
 \section{Timeline}
-\begin{tblr}[%
-    long,%
-    caption = {Time line}%
-]{%
-    width=\linewidth,%
-    colspec={@{}Xl@{}}%
+\filbreak
+{
+    \centering
+    \begin{tblr}[%
+        long,%
+        caption = {Time line}%
+    ]{%
+        width=0.8667\linewidth,%
+        colspec={@{}Xl@{}}%
+    }
+    \toprule
+        Objective & Due Date
+    \\*
+    \midrule
+        data set research & 2022-03-24
+    \\*
+        initial proposal & 2022-03-25
+    \\*
+        proposal revising & 2022-04-06
+    \\*
+        initial data understanding, visualization & 2022-04-06
+    \\*
+        progress report I revising & 2022-04-06
+    \\*
+        pre-processing of data & 2022-04-08
+    \\*
+        progress report II & 2022-04-09
+    \\*
+        experimenting with logistic regression hyper parameters & 2022-04-15
+    \\*
+        lightning talks & 2022-04-19
+    \\*
+        revising presentation of results & 2022-04-22
+    \\*
+        working on final report & 2022-04-23
+    \\*
+        \(\prime\prime\)& 2022-04-04
+    \\*
+    \bottomrule
+    \end{tblr}
 }
-\toprule
-    Objective & Due Date
-\\*
-\midrule
-    data set research & 2022-03-24
-\\*
-    initial proposal & 2022-03-25
-\\*
-    proposal revising & 2022-04-06
-\\*
-    initial data understanding, visualization & 2022-04-06
-\\*
-    progress report I revising & 2022-04-06
-\\*
-    pre-processing of data & 2022-04-08
-\\*
-    progress report II & 2022-04-09
-\\*
-    experimenting with logistic regression hyper parameters & 2022-04-15
-\\*
-    lightning talks & 2022-04-19
-\\*
-    revising presentation of results & 2022-04-22
-\\*
-    working on final report & 2022-04-23
-\\*
-    \(\prime\prime\)& 2022-04-04
-\\*
-\bottomrule
-\end{tblr}
+\newpage
 
 \printbibliography
 
