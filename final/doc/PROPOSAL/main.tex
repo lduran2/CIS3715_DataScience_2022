@@ -67,7 +67,7 @@
         \textbf{Project title:}
         Using satellite imagery to train a model for identifying the type of landmarks.
     \item
-        \textbf{Student names} (1)
+        \textbf{Student names} \tbrao{\(1\)}
         \begin{itemize}
             \item
                 Leomar Durán
@@ -84,6 +84,21 @@
             & Comments
     \\*
     \midrule
+        1.13.0
+            & Leomar Durán
+            & 2022-04-06t02:40
+            & issues with convolutional neural networks
+    \\*
+        1.12.0
+            & Leomar Durán
+            & 2022-04-05t23:10
+            & added issue of over/underfitting to related works
+    \\*
+        1.11.0
+            & Leomar Durán
+            & 2022-04-05t17:40
+            & added issue of computer vision to related works
+    \\*
         1.10.0
             & Leomar Durán
             & 2022-03-25t23:57
@@ -208,6 +223,35 @@ and the same compounded by the number of iterations that must be performed,
 training a computer vision model will require much more time.
 IBM explains that the scale needed for time and storage is such that few organizations have the necessary infrastructure,
 and as a result, many use a service such as IBM's to perform computer vision \cite{IBM2020a}.
+
+When it comes to neural networks,
+common issues include overfitting and underfitting%
+\cite{Vignesh2020a}\cite{Lawrence2005a}.
+Overfitting is when a model is too specific to the training data.
+As a result when the model is tested against the testing data,
+small differences can create large errors compared to the expected output%
+\cite{Gao2022a}.
+Underfitting results from a model that is too simple
+and results in high errors in comparison to the expected results
+for both testing and training data\cite{Vignesh2020a}.
+In order to avoid both, \textcite{Lawrence2005a} suggests the more complex technique of backpropagation.
+
+\textcite{Rolf2021a} provides another method of training a model on satellite data.
+Specifically, they used a hybrid system.
+First, there is a \(18\)-layer convolutional neural network\cite{MATLAB2018resnet_a}.
+However, rather than producing a single output,
+it produces \(2^{9}\) features.
+There is a second convolutional neural network with a ReLu activation function, which produces \(2^{13}\) features\cite{Rolf2021a}.
+The values are then concatenated and placed in a linear regression with a ridge regularization function\cite{Rolf2021a}.
+
+\textcite{Sharma2020a} explains the two main issues with the convolutional neural network, two of which form the basis of this model.
+One issue named are that the convolutional neural network is sensitive to variation in images,
+such as different in phase of the object being imaged,
+differences in lighting,
+and differences in positioning.
+The other issue is that convolutional neural networks are sensitive to even low levels of additive Gaussian white noise.
+Unfortunately, without modulation and a method to demodulate the signal of the image,
+it is very difficult to remove white noise.
 
 \section{Proposed work}
 
