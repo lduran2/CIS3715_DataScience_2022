@@ -4,3 +4,6 @@
 
 # datasets used for model training
 dataset/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
