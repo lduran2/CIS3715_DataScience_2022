@@ -5,6 +5,9 @@ r'''
  For       : CIS 3715/Principles of Data Science
 
  CHANGELOG :
+    v1.2.3 - 2022-04-10t23:45Q
+        stacks->iterators, implemented associated (X,y)
+
     v1.2.2 - 2022-04-10t22:16Q
         fixed df index written, IDed feat/tgt files
 
@@ -27,6 +30,7 @@ import csv                          # for list read
 import random                       # for sampling
 import pandas as pd                 # for dataframe
 from pathlib import Path            # for handling paths
+from cqs_iter import CqsIter        # for iterator
 
 # constants
 K_EXAMPLES = 20000                  # default to sampling 20,000
@@ -49,53 +53,69 @@ def main(K_EXAMPLES=K_EXAMPLES):
         # end if (kopt in (r'-n', r'--nsamples'))
     # next kopt
 
+    # report number of samples
+    print(r"===sampling to {} examples===".format(K_EXAMPLES))
+
     # loop through filenames in argv
-    for strX_inname in argv:
+    for X_inname in argv:
         # set up file names
         # input X, y
-        X_inname = Path(strX_inname)
-        y_inname = X_inname.parent / ''.join(['y', X_inname.name[1:]])
+        X_inpath = Path(X_inname)
+        y_inpath = X_inpath.parent / r''.join([r'y', X_inpath.name[1:]])
         # output X, y
-        samp_label = ['_samp', str(K_EXAMPLES), X_inname.suffix]
-        X_outname = X_inname.parent / ''.join([X_inname.stem, *samp_label])
-        y_outname = X_inname.parent / ''.join([y_inname.stem, *samp_label])
+        samp_label = [r'_samp', str(K_EXAMPLES), X_inpath.suffix]
+        X_outpath = X_inpath.parent / r''.join([X_inpath.stem, *samp_label])
+        y_outpath = X_inpath.parent / r''.join([y_inpath.stem, *samp_label])
         # report reading/writing
-        print('===reading from===')
-        print(X_inname)
-        print(y_inname)
-        print('===writing to===')
-        print(X_outname)
-        print(y_outname)
+        print(r'===reading from===')
+        print(X_inpath)
+        print(y_inpath)
+        print(r'===writing to===')
+        print(X_outpath)
+        print(y_outpath)
         # perform conversion
-        with open(y_inname) as csvfile:
-            # sample the csvfile
-            df = sampleCsvFile(csvfile, K_EXAMPLES)
-            # write to csv file
-            df.to_csv(Path(y_outname), index=False)
-        # end with csvfile
+        with open(X_inpath) as X_csvfile, open(y_inpath) as y_csvfile:
+            # sample the csvfiles
+            # y_csvfile 1st because it will be used to find
+            #   dimensionality and is smaller
+            dfs = sampleCsvFile([y_csvfile, X_csvfile], K_EXAMPLES)
+            # write to each csv file
+            for (df, outpath) in zip(dfs, [y_outpath, X_outpath]):
+                df.to_csv(outpath, index=False)
+            # next (df, outpath)
+        # end with X_csvfile, y_csvfile
         print()
     # next filename
 # end def main()
 
-def sampleCsvFile(infile, K_EXAMPLES):
+def sampleCsvFile(infiles, K_EXAMPLES):
     r'''
      Samples K_EXAMPLES from infile into a dataframe.
-     @param infile : file = source file
+     @param infiles : file = source files in CSV format
      @param K_EXAMPLES : int = # indices to sample
-     @return dataframe of K-sampled examples.
+     @return list of dataframes of K-sampled examples from infiles.
      '''
-    # read each row as a list
-    csvin = csv.reader(infile)
-    # get the dimensionality
-    (N_EXAMPLES, N_FEATURES) =  shape_2d(csvin)
+    # create readers for rows as lists
+    csvins = [ csv.reader(infile) for infile in infiles ]
+    # get the dimensionality (from 1st file)
+    (N_EXAMPLES, _) =  shape_2d(csvins[0])
     # rewind the file
-    infile.seek(0)
-    # sample the indiced
-    i_samples = sampleIndexStack(N_EXAMPLES, K_EXAMPLES)
-    # copy csv file and convert to a dataframe
-    df = pd.DataFrame(idxdCpy([], csvin, i_samples))
+    infiles[0].seek(0)
+    # report number of examples
+    print(r"===sampling {} examples".format(N_EXAMPLES))
+    # sample the indices
+    i_samples = sampleIndexes(N_EXAMPLES, K_EXAMPLES)
+    # list of output dataframes
+    dfs = []
+    # for each csv input file
+    for csvin in csvins:
+        # iterator on samples
+        iit = CqsIter(iter(i_samples))
+        # copy csv file, convert to dataframe
+        dfs.append(pd.DataFrame(idxdCpy([], csvin, iit)))
+    # next csvin
     # return the dataframe
-    return df
+    return dfs
 # end def sample
 
 def shape_2d(list2d):
@@ -115,12 +135,12 @@ def shape_2d(list2d):
     return (N_EXAMPLES, N_FEATURES)
 # end def shape_2d(list2d)
 
-def sampleIndexStack(N, K):
+def sampleIndexes(N, K):
     r'''
-     Creates a stack of the K sampled indices [0..N[.
+     Creates a list of the K sampled indices [0..N[.
      @param N : int = # elements in original iterable
      @param K : int = # indices to sample
-     @return stack of sampled indices.
+     @return list of sampled indices.
      '''
     # indices to be sampled
     iis = range(N)
@@ -128,51 +148,47 @@ def sampleIndexStack(N, K):
     i_samples = random.sample(iis, K)
     # sort them
     i_sorted = sorted(i_samples)
-    # reverse them for a stack
-    istack = i_sorted[::-1]
-    # return the stack
-    return istack
-# end def sampleIndexStack(N, K)
+    # return sorted indexes
+    return i_sorted
+# end def sampleIndexes(N, K)
 
-def idxdCpy(dest, src, istack):
+def idxdCpy(dest, src, iit):
     r'''
-     Copies elements whose index matches those from istack in order
-     from src in dest.
+     Copies elements whose index matches those from the index iterator
+     in order from src in dest.
      @param dest : list<T> = destination list
      @param src : iterable = source iterable
-     @param istack : list<int> = the index stack
+     @param iit : CqsIter<int> = the index iterator
      @return the list copy, dest.
      '''
     for idx, el in enumerate(src):
         # return if no more samples
-        if (not(istack)):
+        if (not(iit.isValid())):
             return dest
-        # end if (not(istack))
-        consumeIdxd(dest.append, idx, el, istack)
+        # end if (not(iit))
+        consumeIdxd(dest.append, idx, el, iit)
     # next el
     return dest
-# end def idxdCpy(dest, src, istack)
+# end def idxdCpy(dest, src, iit)
 
-def consumeIdxd(consume, idx, el, istack):
+def consumeIdxd(consume, idx, el, iit):
     r'''
      Calls the consume callback on the given element if its index is
-     next in the index stack.
-
-     This function is destructive on i_samples.
+     next in the index iterator.
      @param consume : function<? super T> = to consume elements
      @param idx : int = index of current element
      @param el : T = element to consume
-     @param istack : list<int> = the index stack
+     @param iit : CqsIter<int> = the index iterator
      '''
     # consume only if element is next indexed
-    if (idx != istack[-1]):
+    if (idx != iit.get()):
         return
-    # end if (idx != istack[-1])
+    # end if (idx != iit.get())
     # add this element
     consume(el)
     # pop the sample found
-    istack.pop()
-# end def consumeIdxd(consume, idx, el, istack)
+    iit.next()
+# end def consumeIdxd(consume, idx, el, iit)
 
 if __name__ == "__main__":
     main()
