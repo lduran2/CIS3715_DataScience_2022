@@ -5,8 +5,11 @@ r'''
  For       : CIS 3715/Principles of Data Science
 
  CHANGELOG :
-    v1.3.0 - 2022-04-10t21:35Q
-        modularized sample_dataset
+    v1.2.2 - 2022-04-10t22:16Q
+        fixed df index written, IDed feat/tgt files
+
+    v1.2.1 - 2022-04-10t21:35Q
+        modularized `sample_dataset.py`
 
     v1.2.0 - 2022-04-10t17:22Q
         sampling is done
@@ -47,13 +50,30 @@ def main(K_EXAMPLES=K_EXAMPLES):
     # next kopt
 
     # loop through filenames in argv
-    for filename in argv:
-        with open(filename) as csvfile:
+    for strX_inname in argv:
+        # set up file names
+        # input X, y
+        X_inname = Path(strX_inname)
+        y_inname = X_inname.parent / ''.join(['y', X_inname.name[1:]])
+        # output X, y
+        samp_label = ['_samp', str(K_EXAMPLES), X_inname.suffix]
+        X_outname = X_inname.parent / ''.join([X_inname.stem, *samp_label])
+        y_outname = X_inname.parent / ''.join([y_inname.stem, *samp_label])
+        # report reading/writing
+        print('===reading from===')
+        print(X_inname)
+        print(y_inname)
+        print('===writing to===')
+        print(X_outname)
+        print(y_outname)
+        # perform conversion
+        with open(y_inname) as csvfile:
             # sample the csvfile
             df = sampleCsvFile(csvfile, K_EXAMPLES)
             # write to csv file
-            df.to_csv(Path(r'dataset/sampled.csv'))
+            df.to_csv(Path(y_outname), index=False)
         # end with csvfile
+        print()
     # next filename
 # end def main()
 
