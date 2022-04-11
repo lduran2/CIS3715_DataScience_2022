@@ -5,6 +5,9 @@ r'''
  For       : CIS 3715/Principles of Data Science
 
  CHANGELOG :
+    v1.2.4 - 2022-04-11t01:30Q
+        fixed df headers written
+
     v1.2.3 - 2022-04-10t23:45Q
         stacks->iterators, implemented associated (X,y)
 
@@ -79,9 +82,12 @@ def main(K_EXAMPLES=K_EXAMPLES):
             # y_csvfile 1st because it will be used to find
             #   dimensionality and is smaller
             dfs = sampleCsvFile([y_csvfile, X_csvfile], K_EXAMPLES)
-            # write to each csv file
+            # loop through dataframes
             for (df, outpath) in zip(dfs, [y_outpath, X_outpath]):
-                df.to_csv(outpath, index=False)
+                # report the writing
+                print(r"writing to {}".format(outpath))
+                # write to each csv file
+                df.to_csv(outpath, header=False, index=False)
             # next (df, outpath)
         # end with X_csvfile, y_csvfile
         print()
@@ -102,13 +108,15 @@ def sampleCsvFile(infiles, K_EXAMPLES):
     # rewind the file
     infiles[0].seek(0)
     # report number of examples
-    print(r"===sampling {} examples".format(N_EXAMPLES))
+    print(r"===sampling from {} examples".format(N_EXAMPLES))
     # sample the indices
     i_samples = sampleIndexes(N_EXAMPLES, K_EXAMPLES)
     # list of output dataframes
     dfs = []
     # for each csv input file
-    for csvin in csvins:
+    for i_csvin, csvin in enumerate(csvins):
+        # report file being converted
+        print(r"converting from {}".format(infiles[i_csvin]))
         # iterator on samples
         iit = CqsIter(iter(i_samples))
         # copy csv file, convert to dataframe
