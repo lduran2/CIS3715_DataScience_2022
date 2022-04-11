@@ -7,6 +7,9 @@ r'''
  @see https://wiki.kluv.in/a/CommandQuerySeparation (wiki.c2.com)
 
  CHANGELOG :
+    v1.0.1 - 2022-04-11t00:41Q
+        `isValid`->`__bool__`, implemented `__iter__`
+
     v1.0.1 - 2022-04-10t23:26Q
         handling no more elements in iterator
 
@@ -34,7 +37,7 @@ class CqsIter:
         CqsIter.__next(self)
     # def next(self)
 
-    def isValid(self):
+    def __bool__(self):
         r'''
          Returns true if the iterator is valid, i.e., if there is a current element.
          @return true if the iterator is valid; false otherwise.
@@ -60,6 +63,13 @@ class CqsIter:
         return self._curr
     # end def get(self, default=CqsIter.__default)
 
+    def __iter__(self):
+        r'''
+         Returns the backing iterator.
+         @return the backing iterator.
+         '''
+        return self._it
+
     def __next(self):
         r'''
          Private function implements #next.
@@ -67,4 +77,5 @@ class CqsIter:
          '''
         self._curr = next(self._it, CqsIter.__default)
     # end def __next(self)
+
 # end class CqsIter

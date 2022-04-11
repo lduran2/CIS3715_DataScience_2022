@@ -163,7 +163,7 @@ def idxdCpy(dest, src, iit):
      '''
     for idx, el in enumerate(src):
         # return if no more samples
-        if (not(iit.isValid())):
+        if (not(iit)):
             return dest
         # end if (not(iit))
         consumeIdxd(dest.append, idx, el, iit)
