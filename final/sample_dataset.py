@@ -5,6 +5,9 @@ r'''
  For       : CIS 3715/Principles of Data Science
 
  CHANGELOG :
+    v1.2.6 - 2022-04-12t17:01Q
+        `sampleCsvFile` returns tuple of lists
+
     v1.2.5 - 2022-04-12t16:10Q
         lists->tuples where possible
 
@@ -64,11 +67,12 @@ def main(K_EXAMPLES=K_EXAMPLES):
 
     # loop through filenames in argv
     for X_inname in argv:
+        print()
         # set up file names
-        # input X, y
+        # input paths X, y
         X_inpath = Path(X_inname)
         y_inpath = X_inpath.parent / r''.join((r'y', X_inpath.name[1:]))
-        # output X, y
+        # output paths X, y
         samp_label = (r'_samp', str(K_EXAMPLES), X_inpath.suffix)
         X_outpath = X_inpath.parent / r''.join((X_inpath.stem, *samp_label))
         y_outpath = X_inpath.parent / r''.join((y_inpath.stem, *samp_label))
@@ -84,30 +88,34 @@ def main(K_EXAMPLES=K_EXAMPLES):
             # sample the csvfiles
             # y_csvfile 1st because it will be used to find
             #   dimensionality and is smaller
-            dfs = sampleCsvFile([], (y_csvfile, X_csvfile), K_EXAMPLES)
+            csvfiles = (y_csvfile, X_csvfile)
+            outlists = tuple([] for k in range(len(csvfiles)))
+            sampleCsvFile(outlists, csvfiles, K_EXAMPLES)
             # loop through dataframes
-            for (df, outpath) in zip(dfs, (y_outpath, X_outpath)):
+            for (outlist, outpath) in zip(outlists, (y_outpath, X_outpath)):
                 # report the writing
                 print(r"writing to {}".format(outpath))
+                # convert to dataframe
+                df = pd.DataFrame(outlist)
                 # write to each csv file
                 df.to_csv(outpath, header=False, index=False)
-            # next (df, outpath)
+            # next (outlist, outpath)
         # end with X_csvfile, y_csvfile
-        print()
     # next filename
-# end def main()
+# end def main(K_EXAMPLES=K_EXAMPLES)
 
-def sampleCsvFile(dest, infiles, K_EXAMPLES):
+def sampleCsvFile(dests, infiles, K_EXAMPLES):
     r'''
-     Samples K_EXAMPLES from infile into a dataframe.
-     @param dest : listlike<pd.DataFrame> = K-sampled examples from
+     Samples K_EXAMPLES from infiles into destination lists,
+     representing dataframes.
+     @param dests : tuplelike<listlike> = K-sampled examples from
         infiles to be output
      @param infiles : file = source files in CSV format
      @param K_EXAMPLES : int = # indices to sample
-     @return the list of K-sampled dataframes, dest.
+     @return the tuple of K-sampled lists, dest.
      '''
     # create readers for rows as lists
-    csvins = [csv.reader(infile) for infile in infiles]
+    csvins = tuple(csv.reader(infile) for infile in infiles)
     # get the dimensionality (from 1st file)
     (N_EXAMPLES, _) =  shape_2d(csvins[0])
     # rewind the file
@@ -116,18 +124,18 @@ def sampleCsvFile(dest, infiles, K_EXAMPLES):
     print(r"===sampling from {} examples===".format(N_EXAMPLES))
     # sample the indices
     i_samples = sampleIndexes(N_EXAMPLES, K_EXAMPLES)
-    # for each csv input file
-    for i_csvin, csvin in enumerate(csvins):
-        # report file being converted
-        print(r"converting from {}".format(infiles[i_csvin]))
+    # for each csv input file and destination listlike
+    for i_csvin, (csvin, dest) in enumerate(zip(csvins, dests)):
+        # report file being copied into memory
+        print(r"{}. copying from {}".format(i_csvin, infiles[i_csvin]))
         # iterator on samples
         iit = CqsIter(iter(i_samples))
-        # copy csv file, convert to dataframe
-        dest.append(pd.DataFrame(idxdCpy([], csvin, iit)))
+        # copy the csv file
+        idxdCpy(dest, csvin, iit)
     # next csvin
     # return the dataframe
-    return dest
-# end def sample
+    return dests
+# end def sampleCsvFile(dests, infiles, K_EXAMPLES)
 
 def shape_2d(tuple2d):
     r'''
