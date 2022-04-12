@@ -5,6 +5,9 @@ r'''
  For       : CIS 3715/Principles of Data Science
 
  CHANGELOG :
+    v1.2.5 - 2022-04-12t16:10Q
+        lists->tuples where possible
+
     v1.2.4 - 2022-04-11t01:30Q
         fixed df headers written
 
@@ -38,7 +41,7 @@ from cqs_iter import CqsIter        # for iterator
 # constants
 K_EXAMPLES = 20000                  # default to sampling 20,000
 OPTIONS = r'n:'                     # short commandline option names
-LONG_OPTIONS = [ r'nsamples=' ]     # long commandline option names
+LONG_OPTIONS = (r'nsamples=', )     # long commandline option names
 SEED = 42                           # seed for sampling
 
 def main(K_EXAMPLES=K_EXAMPLES):
@@ -64,11 +67,11 @@ def main(K_EXAMPLES=K_EXAMPLES):
         # set up file names
         # input X, y
         X_inpath = Path(X_inname)
-        y_inpath = X_inpath.parent / r''.join([r'y', X_inpath.name[1:]])
+        y_inpath = X_inpath.parent / r''.join((r'y', X_inpath.name[1:]))
         # output X, y
-        samp_label = [r'_samp', str(K_EXAMPLES), X_inpath.suffix]
-        X_outpath = X_inpath.parent / r''.join([X_inpath.stem, *samp_label])
-        y_outpath = X_inpath.parent / r''.join([y_inpath.stem, *samp_label])
+        samp_label = (r'_samp', str(K_EXAMPLES), X_inpath.suffix)
+        X_outpath = X_inpath.parent / r''.join((X_inpath.stem, *samp_label))
+        y_outpath = X_inpath.parent / r''.join((y_inpath.stem, *samp_label))
         # report reading/writing
         print(r'===reading from===')
         print(X_inpath)
@@ -81,9 +84,9 @@ def main(K_EXAMPLES=K_EXAMPLES):
             # sample the csvfiles
             # y_csvfile 1st because it will be used to find
             #   dimensionality and is smaller
-            dfs = sampleCsvFile([y_csvfile, X_csvfile], K_EXAMPLES)
+            dfs = sampleCsvFile([], (y_csvfile, X_csvfile), K_EXAMPLES)
             # loop through dataframes
-            for (df, outpath) in zip(dfs, [y_outpath, X_outpath]):
+            for (df, outpath) in zip(dfs, (y_outpath, X_outpath)):
                 # report the writing
                 print(r"writing to {}".format(outpath))
                 # write to each csv file
@@ -94,25 +97,25 @@ def main(K_EXAMPLES=K_EXAMPLES):
     # next filename
 # end def main()
 
-def sampleCsvFile(infiles, K_EXAMPLES):
+def sampleCsvFile(dest, infiles, K_EXAMPLES):
     r'''
      Samples K_EXAMPLES from infile into a dataframe.
+     @param dest : listlike<pd.DataFrame> = K-sampled examples from
+        infiles to be output
      @param infiles : file = source files in CSV format
      @param K_EXAMPLES : int = # indices to sample
-     @return list of dataframes of K-sampled examples from infiles.
+     @return the list of K-sampled dataframes, dest.
      '''
     # create readers for rows as lists
-    csvins = [ csv.reader(infile) for infile in infiles ]
+    csvins = [csv.reader(infile) for infile in infiles]
     # get the dimensionality (from 1st file)
     (N_EXAMPLES, _) =  shape_2d(csvins[0])
     # rewind the file
     infiles[0].seek(0)
     # report number of examples
-    print(r"===sampling from {} examples".format(N_EXAMPLES))
+    print(r"===sampling from {} examples===".format(N_EXAMPLES))
     # sample the indices
     i_samples = sampleIndexes(N_EXAMPLES, K_EXAMPLES)
-    # list of output dataframes
-    dfs = []
     # for each csv input file
     for i_csvin, csvin in enumerate(csvins):
         # report file being converted
@@ -120,28 +123,29 @@ def sampleCsvFile(infiles, K_EXAMPLES):
         # iterator on samples
         iit = CqsIter(iter(i_samples))
         # copy csv file, convert to dataframe
-        dfs.append(pd.DataFrame(idxdCpy([], csvin, iit)))
+        dest.append(pd.DataFrame(idxdCpy([], csvin, iit)))
     # next csvin
     # return the dataframe
-    return dfs
+    return dest
 # end def sample
 
-def shape_2d(list2d):
+def shape_2d(tuple2d):
     r'''
-     Finds the shape of bidimensional list-like of a dataframe.
-     @param list2d : listlike<listlike> = to traverse
+     Finds the shape of bidimensional tuple-like representing a
+     dataframe.
+     @param tuple2d : tuplelike<tuplelike> = to traverse
      @return (N_EXAMPLES, N_FEATURES) = # of examples, # features of
         the dataframe
      '''
     # loop through the rows
-    for irow, row in enumerate(list2d):
+    for irow, row in enumerate(tuple2d):
         pass
     # next row
     # store the dimensionality of the file
     (N_EXAMPLES, N_FEATURES) = (irow, len(row))
     # return the dimensionality
     return (N_EXAMPLES, N_FEATURES)
-# end def shape_2d(list2d)
+# end def shape_2d(tuple2d)
 
 def sampleIndexes(N, K):
     r'''
@@ -200,3 +204,4 @@ def consumeIdxd(consume, idx, el, iit):
 
 if __name__ == "__main__":
     main()
+# if __name__ == "__main__"
