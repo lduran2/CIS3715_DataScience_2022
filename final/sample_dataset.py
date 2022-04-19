@@ -66,43 +66,56 @@ def main(K_EXAMPLES=K_EXAMPLES):
     print(r"===sampling to {} examples===".format(K_EXAMPLES))
 
     # loop through filenames in argv
-    for X_inname in argv:
-        print()
-        # set up file names
-        # input paths X, y
-        X_inpath = Path(X_inname)
-        y_inpath = X_inpath.parent / r''.join((r'y', X_inpath.name[1:]))
-        # output paths X, y
-        samp_label = (r'_samp', str(K_EXAMPLES), X_inpath.suffix)
-        X_outpath = X_inpath.parent / r''.join((X_inpath.stem, *samp_label))
-        y_outpath = X_inpath.parent / r''.join((y_inpath.stem, *samp_label))
-        # report reading/writing
-        print(r'===reading from===')
-        print(X_inpath)
-        print(y_inpath)
-        print(r'===writing to===')
-        print(X_outpath)
-        print(y_outpath)
-        # perform conversion
-        with open(X_inpath) as X_csvfile, open(y_inpath) as y_csvfile:
-            # sample the csvfiles
-            # y_csvfile 1st because it will be used to find
-            #   dimensionality and is smaller
-            csvfiles = (y_csvfile, X_csvfile)
-            outlists = tuple([] for k in range(len(csvfiles)))
-            sampleCsvFile(outlists, csvfiles, K_EXAMPLES)
-            # loop through dataframes
-            for (outlist, outpath) in zip(outlists, (y_outpath, X_outpath)):
-                # report the writing
-                print(r"writing to {}".format(outpath))
-                # convert to dataframe
-                df = pd.DataFrame(outlist)
-                # write to each csv file
-                df.to_csv(outpath, header=False, index=False)
-            # next (outlist, outpath)
-        # end with X_csvfile, y_csvfile
-    # next filename
+    for X_filename in argv:
+        # sample X, y represented by that filename
+        mainarg(X_filename, K_EXAMPLES)
+    # next X_filename
 # end def main(K_EXAMPLES=K_EXAMPLES)
+
+def mainarg(X_inname, K_EXAMPLES):
+    r'''
+     Samples a set of X, y given a dataset's filename.
+     @param X_inname : str = filename '*/X_*' representing a dataset
+        X, y
+     @param K_EXAMPLES : int = # indices to sample
+     '''
+    print()
+    # set up file names
+    # input paths X, y
+    X_inpath = Path(X_inname)
+    y_inpath = X_inpath.parent / r''.join((r'y', X_inpath.name[1:]))
+    # output paths X, y
+    samp_label = (r'_samp', str(K_EXAMPLES), X_inpath.suffix)
+    X_outpath = X_inpath.parent / r''.join((X_inpath.stem, *samp_label))
+    y_outpath = X_inpath.parent / r''.join((y_inpath.stem, *samp_label))
+    # report reading/writing
+    print(r'===reading from===')
+    print(X_inpath)
+    print(y_inpath)
+    print(r'===writing to===')
+    print(X_outpath)
+    print(y_outpath)
+    # perform conversion
+    with open(X_inpath) as X_csvfile, open(y_inpath) as y_csvfile:
+        # sample the csvfiles
+        # y_csvfile 1st because it will be used to find
+        #   dimensionality and is smaller
+        csvfiles = (y_csvfile, X_csvfile)
+        outlists = tuple([] for k in range(len(csvfiles)))
+        sampleCsvFile(outlists, csvfiles, K_EXAMPLES)
+        # loop through dataframes
+        for (outlist, outpath) in zip(outlists, (y_outpath, X_outpath)):
+            # report the writing
+            print(r"writing to {}".format(outpath))
+            # convert to dataframe
+            df = pd.DataFrame(outlist)
+            # write to each csv file
+            df.to_csv(outpath, header=False, index=False)
+            # delete the reference to dataframe
+            del df
+        # next (outlist, outpath)
+    # end with X_csvfile, y_csvfile
+# end def mainarg(X_inname, K_EXAMPLES)
 
 def sampleCsvFile(dests, infiles, K_EXAMPLES):
     r'''
