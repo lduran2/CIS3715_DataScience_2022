@@ -5,6 +5,9 @@ r'''
  For       : CIS 3715/Principles of Data Science
 
  CHANGELOG :
+    v1.2.7 - 2022-04-19t01:37Q
+        `mainarg` for each arg, delete `df` after use
+
     v1.2.6 - 2022-04-12t17:01Q
         `sampleCsvFile` returns tuple of lists
 
@@ -72,7 +75,7 @@ def main(K_EXAMPLES=K_EXAMPLES):
     # next X_filename
 # end def main(K_EXAMPLES=K_EXAMPLES)
 
-def mainarg(X_inname, K_EXAMPLES):
+def mainarg(X_inname, K_EXAMPLES=K_EXAMPLES):
     r'''
      Samples a set of X, y given a dataset's filename.
      @param X_inname : str = filename '*/X_*' representing a dataset
