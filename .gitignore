@@ -2,5 +2,11 @@
 *.zip
 .DS_Store
 
+# compiled caches
+__pycache__/
+
+# datasets used for model training
+dataset/
+
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
