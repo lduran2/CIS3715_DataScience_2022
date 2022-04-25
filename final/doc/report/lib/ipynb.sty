@@ -14,12 +14,14 @@
 \usepackage{graphicx}
 % Maintain compatibility with old templates. Remove in nbconvert 6.0
 \let\Oldincludegraphics\includegraphics
+
+% ignore the part that removes figures so we can use it in another document
 % Ensure that by default, figures have no caption (until we provide a
 % proper Figure object with a Caption API and a way to capture that
 % in the conversion process - todo).
 \usepackage{caption}
-\DeclareCaptionFormat{nocaption}{}
-\captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+%\DeclareCaptionFormat{nocaption}{}
+%\captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
 
 \usepackage{float}
 \floatplacement{figure}{H} % forces figures to be placed at the correct location
@@ -35,6 +37,7 @@
 }
 \usepackage{upquote} % Upright quotes for verbatim code
 \usepackage{eurosym} % defines \euro
+% ignore font ucs which is incompatible with biblatex
 %\usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
 \usepackage{fancyvrb} % verbatim replacement that allows latex
 \usepackage{grffile} % extends the file name processing of package graphics 

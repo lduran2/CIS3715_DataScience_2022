@@ -9,7 +9,6 @@
 \date{April 2022}
 
 % for the Jupyter notebook
-% UCS is commented out because it is incompatible with BibLaTeX
 \usepackage{lib/ipynb}
 \usepackage{minted}
 
@@ -25,6 +24,8 @@
 \usepackage[inline]{enumitem}
 \setlist[1]{leftmargin=0in}
 
+% non-floating figures and tables
+\usepackage{lib/nonfloatenvirons}
 % table width, rules, row spacing
 \usepackage{tabularx}
 \usepackage{booktabs}
@@ -268,6 +269,51 @@ Another issue that we will run into is deciding the best way to split the classe
 
 An anticipated outcome is a model that can identify the types of terrains accurately from the given dataset.
 
+\section{Results}
+
+\begin{table}[]
+    \centering
+    \[
+        \begin{array}{@{}llS[round-mode=figures,round-precision=4]@{}}
+        \toprule
+            \text{dividend} & \text{divisor} & \text{quotient}
+        \\*
+        \midrule
+            \text{MAE train} & \text{MAE test}
+            & 0.836726
+        \\*
+            \text{RMSE train} & \text{RMSE test}
+            & 0.843065
+        \\*
+            \text{MAE test} & \text{MAD train}
+            & 0.761874
+        \\*
+            \text{RMSE test} & \text{\(\sigma\) train}
+            & 0.735807
+        \\*
+        \bottomrule
+        \end{array}
+    \]
+    \caption{Error ratios.}
+    \label{tab:error ratios}
+\end{table}
+
+Table \ref{tab:error ratios} shows us the results of the linear regression in numbers.
+Specifically,
+we found that the linear regression was slightly overfit by the two error ratios of \(\num{0.8367}\) and \(\num{0.8431}\).
+These represent an overfit because the errors of the training are less than the errors against the test data.
+Thus the ratio is less than \(1\).
+
+This table also shows us that the mean absolute error is at about \(0.76\) mean absolute deviations around the median
+and that the root mean square error is at about \(0.74\) standard deviations,
+which mean that the model has a moderate predictive power since it is close to \(1\).
+
+In their normal forms, mean absolute error and root mean square error give us a measure of the predictive power of the model \cite{rms2016}.
+Then
+we can use these last two normalizations because the more familiar standard deviation is also known as the root mean square.
+In fact, the root mean square error is the same formula as the root mean square,
+but using the corresponding predicted value for each label instead of the mean.
+Likewise we use the mean absolute deviation about the median to normalize the mean absolute error.
 
 
 \section{What has been done}

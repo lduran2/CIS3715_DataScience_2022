@@ -3,30 +3,6 @@
 type of
 landmarks}\label{using-satellite-imagery-to-train-a-model-for-identifying-the-type-of-landmarks}}
 
-    \hypertarget{sampling}{%
-\subsection{Sampling}\label{sampling}}
-
-Because of the memory limitations of my computer, I cannot load the
-entire dataset into memory and perform operations on it. As a result, I
-will instead sample both datasets into \({20000}\) examples before
-working with them.
-
-    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{ }{\boxspacing}
-\begin{Verbatim}[commandchars=\\\{\}]
-\PY{c+c1}{\PYZsh{} the sampling script that I wrote}
-\PY{k+kn}{from} \PY{n+nn}{sample\PYZus{}dataset} \PY{k+kn}{import} \PY{n}{mainarg} \PY{k}{as} \PY{n}{sample\PYZus{}from\PYZus{}filename}
-
-\PY{c+c1}{\PYZsh{} filenames for training and test data}
-\PY{n}{data\PYZus{}filenames} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dataset/X\PYZus{}train\PYZus{}sat4.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dataset/X\PYZus{}test\PYZus{}sat4.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-
-\PY{c+c1}{\PYZsh{} loop through filenames}
-\PY{k}{for} \PY{n}{filename} \PY{o+ow}{in} \PY{n}{data\PYZus{}filenames}\PY{p}{:}
-    \PY{n}{sample\PYZus{}from\PYZus{}filename}\PY{p}{(}\PY{n}{filename}\PY{p}{)}
-\PY{c+c1}{\PYZsh{} next filename}
-\end{Verbatim}
-\end{tcolorbox}
-
     \hypertarget{preprocess-data}{%
 \subsection{Preprocess data}\label{preprocess-data}}
 
@@ -1024,40 +1000,40 @@ errors are strictly greater than the training errors. Thus, we have a
 case of overfit. We will later solve that through ridge regularization.
 
     Next, let's compare the \(M\!A\!E\) and \(R\!M\!S\!E\) of the test data
-with the interquartile range and standard deviation respectively of the
-training data.
+with the mean absolute deviation around the median and standard
+deviation respectively of the training data.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{30}{\boxspacing}
+\prompt{In}{incolor}{103}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{c+c1}{\PYZsh{} find the norms}
 \PY{n}{L1\PYZus{}y\PYZus{}train} \PY{o}{=} \PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{y\PYZus{}train\PYZus{}lind}\PY{p}{)}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
 \PY{n}{L2\PYZus{}y\PYZus{}train} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{p}{(}\PY{n}{y\PYZus{}train\PYZus{}lind}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{/}\PY{l+m+mf}{2.0}\PY{p}{)}\PY{p}{)}
 
-\PY{c+c1}{\PYZsh{} for MAE, we find the ratio to the IQR of the L1\PYZhy{}norm}
-\PY{n}{q1}\PY{p}{,} \PY{n}{q3} \PY{o}{=} \PY{p}{(}\PY{n}{L1\PYZus{}y\PYZus{}train}\PY{o}{.}\PY{n}{quantile}\PY{p}{(}\PY{n}{q}\PY{o}{=}\PY{n}{q}\PY{p}{)} \PY{k}{for} \PY{n}{q} \PY{o+ow}{in} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{l+m+mf}{0.25}\PY{p}{)}
-\PY{n}{iqr} \PY{o}{=} \PY{n}{q3} \PY{o}{\PYZhy{}} \PY{n}{q1}
-\PY{n}{mae\PYZus{}iqr\PYZus{}test} \PY{o}{=} \PY{n}{mae\PYZus{}test}\PY{o}{/}\PY{n}{iqr}
+\PY{c+c1}{\PYZsh{} for MAE, we find the ratio to the mean absolute deviation around the median of the L1\PYZhy{}norm}
+\PY{n}{q2} \PY{o}{=} \PY{n}{L1\PYZus{}y\PYZus{}train}\PY{o}{.}\PY{n}{quantile}\PY{p}{(}\PY{n}{q}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}
+\PY{n}{mad} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{norm}\PY{p}{(}\PY{p}{(}\PY{n}{L1\PYZus{}y\PYZus{}train} \PY{o}{\PYZhy{}} \PY{n}{q2}\PY{p}{)}\PY{p}{,} \PY{n+nb}{ord}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{/}\PY{n}{N\PYZus{}XAMPS}
+\PY{n}{mae\PYZus{}iqr\PYZus{}test} \PY{o}{=} \PY{n}{mae\PYZus{}test}\PY{o}{/}\PY{n}{mad}
 
 \PY{c+c1}{\PYZsh{} for RMSE, we find the ratio by the standard deviation of the L2\PYZhy{}norm}
 \PY{n}{std} \PY{o}{=} \PY{n}{L2\PYZus{}y\PYZus{}train}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{p}{)}
 \PY{n}{rmse\PYZus{}std\PYZus{}test} \PY{o}{=} \PY{n}{rmse\PYZus{}test}\PY{o}{/}\PY{n}{std}
 
 \PY{c+c1}{\PYZsh{} display the results}
-\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{IQR:}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{iqr}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MAD:}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{mad}\PY{p}{)}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SD:}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{std}\PY{p}{)}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
 
-\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MAE test:IQR train:}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{mae\PYZus{}iqr\PYZus{}test}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MAE test:MAD train:}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{mae\PYZus{}iqr\PYZus{}test}\PY{p}{)}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RMSE test:SD train:}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{rmse\PYZus{}std\PYZus{}test}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-IQR:    1.0
+MAD:    0.356
 SD:     0.4788271752659708
 
-MAE test:IQR train:     0.27122718739782964
+MAE test:MAD train:     0.7618741219040158
 RMSE test:SD train:     0.7358072074507027
     \end{Verbatim}
 
@@ -1065,9 +1041,9 @@ RMSE test:SD train:     0.7358072074507027
 error is much less than one interquartile range, and the root mean
 square error is less than one standard deviation.
 
-This means that the model has a strong predictive power. However, since
-\(R\!M\!S\!E:\sigma\) is getting close to \(1\), it is a moderately
-strong predictive power.
+This means that the model has a strong predictive power. However,
+because both are close to \(1\), it is a moderately strong predictive
+power.
 
     \hypertarget{ridge-regularization-to-reduce-overfitting}{%
 \subsection{Ridge regularization to reduce
