@@ -1,0 +1,29 @@
+\RequirePackage{nonfloat}
+% save original caption
+\let\innercaption\caption%
+% redefines a nonfloat environment
+% @param 1 the environment name
+% @param 2 the type of caption to use
+% @param 3 text before the environment
+% @param 4 text after the environment
+\newcommand*\renewnonfloatenvironment[4]{%
+    \renewenvironment*{#1}[1][]%
+        {%
+            #3%
+            % redefine caption according to block
+            \renewcommand*\caption[1]{%
+                % replace caption with the original caption
+                \let\outercaption\caption%
+                \let\caption\innercaption%
+                % call the appropriate caption
+                #2{####1}%
+                % restore caption to this caption
+                \let\caption\outercaption%
+            }% \renewcommand*\caption[1]
+            \minipage{\linewidth}%
+        }%
+        {\endminipage#4}%
+    %
+}%
+\renewnonfloatenvironment{figure}{\figcaption}{}{\\*[\intextsep]}%
+\renewnonfloatenvironment{table}{\tabcaption}{\ \\*}{\ \\*}%
