@@ -145,7 +145,7 @@ as there will be
 Ideally the solution would also perform well for multiple clases,
 but this is less of an issue than dimensionality.
 
-\subsection{Related works}
+\subsection{Related works}\label{ssc:related works}
 
 One of the historical approaches to this problem is that by \textcite{Basu2015a} themselves,
 who
@@ -201,25 +201,18 @@ As for position and phase of the image, this is a much different problem to tack
 However, if the image were more more regular and you could expect a guideline,
 it could be used to properly orient the image using a rotation matrix.
 
-\section{What has been done}
+\section{Approach}
 
-The sampling is working now.
-I can now load the datasets,
-so it will be possible to work with the sampled datasets now.
+\subsection{Idea}
 
-\section{What has not been done}
+Our primary idea is that we want to avoid overfitting or complex models.
+As explained in \ref{ssc:related works},
+overfitting is a very common issue with neural networks,
+which is usually resolved through backpropagation.
+However, we want to avoid complexity where possible.
+This will be our primary motivator in starting from the ground up.
 
-I have not started working on the preprocessing or the model yet.
-
-\section{What will be done during the following week.}
-
-I will do my best to get preprocessing out of the way and do some basic model training and testing.
-It will be an iterative process
-so I can choose the best minimal model.
-
-\part{Final Project Proposal}
-
-\section{Proposed work}
+\subsection{Proposed work}
 
 We are given
 The SAT-4 airborne dataset%
@@ -248,8 +241,20 @@ these tiles represent ``different landscapes like rural areas, urban areas, dens
 so these as a disjoint set of landscapes would make for appropriate labels.
 
 Our proposed solution is a multi-class logistic regression.
+However, we intended to work from the ground up
+starting with linear regression
+and testing until we found something that worked good enough
+without overfitting
+as was a worry in past works.
+However, we had an issue with logistic regression.
 
-\subsection{Design and implementation challenges}
+This issue is that since the dataset has multiple classes,
+the specific encoding that was used in the data for those classes was one-hot encoding.
+Thus the labels were vectors.
+However, the \mintinline{python}{scikit-learn} package's logistic regression is designed to work specifically with scalar labels.
+Because of this the ridge regression seemed like the last more natural choice for this dataset.
+
+\subsubsection{Design and implementation challenges}
 
 A challenge to this solution is the size of the dataset.
 Because of its size \tbrao{about \(\SI3{\giga\byte}\)}, we expect long processing times.
@@ -259,9 +264,29 @@ from \(\num{400000}\) to a more managable number such as
 
 Another issue that we will run into is deciding the best way to split the classes for the multi-class classification.
 
-\subsection{Anticipated project outcomes and impacts}
+\subsubsection{Anticipated project outcomes and impacts}
 
 An anticipated outcome is a model that can identify the types of terrains accurately from the given dataset.
+
+
+
+\section{What has been done}
+
+The sampling is working now.
+I can now load the datasets,
+so it will be possible to work with the sampled datasets now.
+
+\section{What has not been done}
+
+I have not started working on the preprocessing or the model yet.
+
+\section{What will be done during the following week.}
+
+I will do my best to get preprocessing out of the way and do some basic model training and testing.
+It will be an iterative process
+so I can choose the best minimal model.
+
+\part{Final Project Proposal}
 
 \section{Timeline}
 \filbreak
