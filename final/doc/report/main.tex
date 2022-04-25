@@ -8,6 +8,11 @@
 \author{Leomar Durán}
 \date{April 2022}
 
+% for the Jupyter notebook
+% UCS is commented out because it is incompatible with BibLaTeX
+\usepackage{lib/ipynb}
+\usepackage{minted}
+
 % line spacing, paragraph indentation
 \usepackage{setspace}
 \singlespacing
@@ -427,5 +432,21 @@ I have not started working on the preprocessing or the model yet.
 I will do my best to get preprocessing out of the way and do some basic model training and testing.
 It will be an iterative process
 so I can choose the best minimal model.
+
+\newpage
+\appendix
+\title{CIS 3715 Final Project Report Appendix}
+
+\maketitle
+
+\part{Jupyter notebook of the project}
+\graphicspath{{ipynb/}}
+\input{ipynb/final_project_on_sat4_doc}
+
+\part{Sampling script}
+\inputminted{python}{src/sample_dataset.py}
+
+\part{Command-query separated iterator}
+\inputminted{python}{src/cqs_iter.py}
 
 \end{document}
