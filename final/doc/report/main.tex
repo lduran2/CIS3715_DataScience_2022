@@ -67,6 +67,8 @@
 % math delimiters
 \usepackage{mathtools}%
 \DeclarePairedDelimiter\brao()%
+\DeclarePairedDelimiter\brac[]%
+\DeclarePairedDelimiter\angl<>%
 
 % macros for delimiters in text
 \newcommand*\DeclareTextPairedDelimiters[3]{%
@@ -271,6 +273,31 @@ An anticipated outcome is a model that can identify the types of terrains accura
 
 \section{Results}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{ipynb/output_44_0.png}
+    \caption{The weights including bias learned.}
+    \label{fig:weights}
+\end{figure}
+
+Fig. \ref{fig:weights} shows the weights that were learned.
+The bias is most important in this model.
+Most of the weights are equally important,
+but there are a few that are more important,
+and many more that are not very important and could be reduced.
+I did not perform any feature reduction however.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{ipynb/output_52_1.png}
+    \caption{Bar plot of the multiplicities of the classes in ground truth and prediction.}
+    \label{fig:multiplicity bar plot}
+\end{figure}
+
+In Fig. {fig:multiplicity bar plot}, we see a visual representation of the multiplicities of the terrain type classes.
+It seems like a close fit.
+However, all this is, is a visual representation of a count of each of the classes.
+
 \begin{table}[]
     \centering
     \[
@@ -285,6 +312,7 @@ An anticipated outcome is a model that can identify the types of terrains accura
             \text{RMSE train} & \text{RMSE test}
             & 0.843065
         \\*
+        \midrule
             \text{MAE test} & \text{MAD train}
             & 0.761874
         \\*
@@ -315,6 +343,184 @@ In fact, the root mean square error is the same formula as the root mean square,
 but using the corresponding predicted value for each label instead of the mean.
 Likewise we use the mean absolute deviation about the median to normalize the mean absolute error.
 
+\begin{table}[]
+    \centering
+    \[
+        \begin{array}{@{}SS[round-mode=figures,round-precision=4]l*4{S[round-mode=figures,round-precision=5,group-separator={\,}]}}
+        \toprule
+            \multicolumn{2}{@{}l}{\text{regularization \(\lambda\)}}
+            & \phantom{abc}
+            & \text{accuracy}
+            & \text{recall}
+            & \text{precision}
+            & \text{\(F_1\) score}
+        \\*
+        \cmidrule{1-2}
+            \brac*{\si{\deci\bel}}
+            &
+            \angl{1}
+        \\*
+        \midrule
+            \text{none} &
+                && 0.58665
+                & 0.4493992231017458
+                & 0.6065020921872838
+                & 0.5036355376125148
+        \\*
+        \midrule
+            -10 & 0.31622776601683794
+                && 0.58715
+                & 0.44922446696412854
+                & 0.6075849506159723
+                & 0.5037411510816644
+        \\*
+            -9 & 0.35481338923357547
+                && 0.5872
+                & 0.4492886435781704
+                & 0.6077762406861051
+                & 0.5038066425016782
+        \\*
+            -8 & 0.3981071705534972
+                && 0.5873
+                & 0.4494337852962524
+                & 0.607844995207374
+                & 0.5039229368765102
+        \\*
+            -7 & 0.44668359215096315
+                && 0.58735
+                & 0.4493528201922122
+                & 0.6079392009526936
+                & 0.5038767122931914
+        \\*
+            -6 & 0.5011872336272722
+                && 0.58735
+                & 0.449271855088172
+                & 0.6079398509472012
+                & 0.5038157451076203
+        \\*
+        \midrule
+            -5 & 0.5623413251903491
+                && 0.58755
+                & 0.4490842730210176
+                & 0.6081144087457719
+                & 0.5036484574642933
+        \\*
+            -4 & 0.6309573444801932
+                && 0.5876
+                & 0.4490842730210176
+                & 0.6083680618451495
+                & 0.503697137969315
+        \\*
+            -3 & 0.7079457843841379
+                && 0.58735
+                & 0.4486370071517444
+                & 0.6078782887164116
+                & 0.5031616356837981
+        \\*
+            -2 & 0.7943282347242815
+                && 0.58745
+                & 0.44885028804432964
+                & 0.6078626211036924
+                & 0.5032986730138832
+        \\*
+            -1 & 0.8912509381337456
+                && 0.58755
+                & 0.4486755319067122
+                & 0.60803368099758
+                & 0.5031846728113596
+        \\*
+        \midrule
+            0 & 1.0
+                && 0.58775
+                & 0.44873970852075407
+                & 0.6086427593859304
+                & 0.5033432141352383
+        \\*
+        \midrule
+            1 & 1.1220184543019633
+                && 0.58775
+                & 0.4485649523831367
+                & 0.6086225636833118
+                & 0.5032103547844932
+        \\*
+            2 & 1.2589254117941673
+                && 0.588
+                & 0.448872024309299
+                & 0.6090748139440184
+                & 0.5035466488795411
+        \\*
+            3 & 1.4125375446227544
+                && 0.5881
+                & 0.44869726817168165
+                & 0.6095694906461742
+                & 0.5035110328600362
+        \\*
+            4 & 1.5848931924611136
+                && 0.5885
+                & 0.4487782332757218
+                & 0.6104109099997941
+                & 0.5037766968830625
+        \\*
+            5 & 1.7782794100389228
+                && 0.5885
+                & 0.44852251203406435
+                & 0.6107817976750681
+                & 0.5036020810947259
+        \\*
+        \midrule
+            6 & 1.9952623149688795
+                && 0.58845
+                & 0.44817299975882957
+                & 0.6107110409285051
+                & 0.5032615372821362
+        \\*
+            7 & 2.2387211385683394
+                && 0.58855
+                & 0.44798541769167527
+                & 0.6107363934997151
+                & 0.5030861896774851
+        \\*
+            8 & 2.51188643150958
+                && 0.58875
+                & 0.44798541769167527
+                & 0.6113871721572975
+                & 0.5032827113710475
+        \\*
+            9 & 2.8183829312644537
+                && 0.5891
+                & 0.44790445258763506
+                & 0.6122752617389601
+                & 0.5034322630651811
+        \\*
+            10 & 3.1622776601683795
+                && 0.58925
+                & 0.4479094003626063
+                & 0.6123493532783794
+                & 0.5033598847989803
+        \\*
+        \bottomrule
+        \end{array}
+    \]
+    \caption{Scores with different values of the regularization hyperparameter \(\lambda\).}
+    \label{tab:regularizations scores}
+\end{table}
+
+Table \ref{tab:regularizations scores} shows us
+the scores for the different regularization hyperparameters \(\lambda\) of a ridge regression
+with the first being the original linear regression with no regularization. The models have somewhat bad recall with moderately fair precision. A visiual representation is provided by Fig.\ref{fig:precision vs recall}  below.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{ipynb/output_67_0.png}
+    \caption{Precision versus recall by regularization hyperparameter \(\lambda\) with linear regression as a disc.}
+    \label{fig:precision vs recall}
+\end{figure}
+
+Hyperparameter
+\(\lambda = \SI{-8}{\deci\bel} = 0.3981\)
+the \(F_1\) score%
+, representing the harmonic mean of recall and precision,
+maximizes at \(F_1 = \num[group-separator={\,}]{0.50392}\).
 
 \section{What has been done}
 
