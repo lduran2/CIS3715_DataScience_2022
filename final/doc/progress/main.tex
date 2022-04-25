@@ -35,6 +35,9 @@
 \titlelabel{\llap{\thetitle\quad}}
 % remove chapter numbers from sections
 \renewcommand*\thesection{\arabic{section}}
+% reset section counter after each part
+\let\oldpart\part%
+\renewcommand*\part[1]{\oldpart{#1}\setcounter{section}0}%
 
 % for loading the bibliography
 \usepackage[%
@@ -87,6 +90,11 @@
             & Comments
     \\*
     \midrule
+        2.1.0
+            & Leomar Durán
+            & 2022-04-10t23:49
+            & finished progress report I
+    \\*
         2.0.0
             & Leomar Durán
             & 2022-04-06t12:30
@@ -170,7 +178,23 @@
     \bottomrule
 \end{tblr}
 
-\part{Progress Report I}
+\part{Progress Report II}
+
+\section{What has been done}
+
+The sampling is working now.
+I can now load the datasets,
+so it will be possible to work with the sampled datasets now.
+
+\section{What has not been done}
+
+I have not started working on the preprocessing or the model yet.
+
+\section{What will be done during the following week.}
+
+I will do my best to get preprocessing out of the way and do some basic model training and testing.
+It will be an iterative process
+so I can choose the best minimal model.
 
 \part{Final Project Proposal}
 
@@ -313,7 +337,7 @@ along with the SAT-6 airborne dataset%
 
 The dataset consists of \(\num{400000}\) example tiles
 taken from satellite imagery originally from the National Agriculture Imagery Program \tbrao{NAIP} dataset.
-Each sample has features representing the pixels of a \(\SI[parse-numbers=false]{\brao{28\times28}\!}\pixel\) image 
+Each example has features representing the pixels of a \(\SI[parse-numbers=false]{\brao{28\times28}\!}\pixel\) image 
 multiplied by the channels for red, green, blue and near infrared \tbrao{NIR}.
 According to \textcite{Basu2015a},
 these tiles represent ``different landscapes like rural areas, urban areas, densely forested, mountainous terrain, small to large water bodies",
@@ -372,7 +396,7 @@ An anticipated outcome is a model that can identify the types of terrains accura
     \\*
         working on final report & 2022-04-23
     \\*
-        \(\prime\prime\)& 2022-04-04
+        \(\prime\prime\)& 2022-04-24
     \\*
     \bottomrule
     \end{tblr}
@@ -380,5 +404,28 @@ An anticipated outcome is a model that can identify the types of terrains accura
 \newpage
 
 \printbibliography
+
+\part{Progress Report I}
+
+\section{What has been done}
+
+I have mostly been working on the sampling.
+Because of the limitations of my computer,
+I cannot load the entire dataset into memory and perform operations on it.
+As a result,
+I will instead sample both datasets into \(\num{20000}\) examples
+before working with them.
+
+My progress is available at \href{https://github.com/lduran2/CIS3715_DataScience_2022/tree/final/final}{my project repository}.
+
+\section{What has not been done}
+
+I have not started working on the preprocessing or the model yet.
+
+\section{What will be done during the following week.}
+
+I will do my best to get preprocessing out of the way and do some basic model training and testing.
+It will be an iterative process
+so I can choose the best minimal model.
 
 \end{document}
