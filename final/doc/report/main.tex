@@ -51,7 +51,7 @@
 ]{biblatex}
 \addbibresource{main.bib}
 \defbibheading{bibliography}[\refname]{%
-  \section{#1}%
+  \section{Acknowledgements}%
 }%
 
 % SI units, added pixels
@@ -165,7 +165,7 @@ it will require much storage,
 and the same compounded by the number of iterations that must be performed,
 training a computer vision model will require much more time.
 IBM explains that the scale needed for time and storage is such that few organizations have the necessary infrastructure,
-and as a result, many use a service such as IBM's to perform computer vision \cite{IBM2020a}.
+and as a result, many use a service such as IBM's to perform computer vision\cite{IBM2020a}.
 
 When it comes to neural networks,
 common issues include overfitting and underfitting%
@@ -206,6 +206,8 @@ it could be used to properly orient the image using a rotation matrix.
 
 \section{Approach}
 
+
+
 \subsection{Idea}
 
 Our primary idea is that we want to avoid overfitting or complex models.
@@ -214,6 +216,8 @@ overfitting is a very common issue with neural networks,
 which is usually resolved through backpropagation.
 However, we want to avoid complexity where possible.
 This will be our primary motivator in starting from the ground up.
+
+Our progress is also available at \href{https://github.com/lduran2/CIS3715_DataScience_2022/tree/final/final}{the project repository}.
 
 \subsection{Proposed work}
 
@@ -336,7 +340,7 @@ This table also shows us that the mean absolute error is at about \(0.76\) mean 
 and that the root mean square error is at about \(0.74\) standard deviations,
 which mean that the model has a moderate predictive power since it is close to \(1\).
 
-In their normal forms, mean absolute error and root mean square error give us a measure of the predictive power of the model \cite{rms2016}.
+In their normal forms, mean absolute error and root mean square error give us a measure of the predictive power of the model\cite{rms2016}.
 Then
 we can use these last two normalizations because the more familiar standard deviation is also known as the root mean square.
 In fact, the root mean square error is the same formula as the root mean square,
@@ -522,92 +526,39 @@ the \(F_1\) score%
 , representing the harmonic mean of recall and precision,
 maximizes at \(F_1 = \num[group-separator={\,}]{0.50392}\).
 
-\section{What has been done}
+\section{Conclusion}
 
-The sampling is working now.
-I can now load the datasets,
-so it will be possible to work with the sampled datasets now.
+Overall, the project was not as successful as I had planned.
+The ridge regressions gave very low recall and a somewhat low precision.
 
-\section{What has not been done}
+I believe that the two issues that gave me the most difficulty were
+the large number of examples (\(\num{400000}\))
+and the labels which were each a \(4\)-vector one-hot encoded.
 
-I have not started working on the preprocessing or the model yet.
+The sampling program took a while to write because of the memory issues,
+and because I was having a hard time keeping up with other classes,
+which I neglected the project as a result.
 
-\section{What will be done during the following week.}
+As for the one-hot encoding,
+I was not sure how best to handle it.
+I considered after the project that label or ordinal encoding may be options.
+However that carries with it the connotation of ranking,
+which I'm not sure how the terrain type would rank,
+and it may depend on application,
+which is outside the scope of this project.
 
-I will do my best to get preprocessing out of the way and do some basic model training and testing.
-It will be an iterative process
-so I can choose the best minimal model.
+It may have also been interesting to attempt clustering
+to see if the examples fit the labels provided,
+or even if \(4\) labels was the optimal number.
 
-\part{Final Project Proposal}
-
-\section{Timeline}
-\filbreak
-{
-    \centering
-    \begin{tblr}[%
-        long,%
-        caption = {Time line}%
-    ]{%
-        width=0.8667\linewidth,%
-        colspec={@{}Xl@{}}%
-    }
-    \toprule
-        Objective & Due Date
-    \\*
-    \midrule
-        data set research & 2022-03-24
-    \\*
-        initial proposal & 2022-03-25
-    \\*
-        proposal revising & 2022-04-06
-    \\*
-        initial data understanding, visualization & 2022-04-06
-    \\*
-        progress report I revising & 2022-04-06
-    \\*
-        pre-processing of data & 2022-04-08
-    \\*
-        progress report II & 2022-04-09
-    \\*
-        experimenting with logistic regression hyper parameters & 2022-04-15
-    \\*
-        lightning talks & 2022-04-19
-    \\*
-        revising presentation of results & 2022-04-22
-    \\*
-        working on final report & 2022-04-23
-    \\*
-        \(\prime\prime\)& 2022-04-24
-    \\*
-    \bottomrule
-    \end{tblr}
-}
-\newpage
+As for the outcomes,
+I believe that we were able to prove that a somewhat reliable model is possible
+without resorting to computer vision
+or a neural network (convolutional or otherwise).
+I also got to learn many new techniques, to teach myself features of \mintinline{python}{pandas} and \mintinline{python}{sklearn} with which I was not familiar,
+and to explore the limits of those with which that I am familiar.
 
 \printbibliography
-
-\part{Progress Report I}
-
-\section{What has been done}
-
-I have mostly been working on the sampling.
-Because of the limitations of my computer,
-I cannot load the entire dataset into memory and perform operations on it.
-As a result,
-I will instead sample both datasets into \(\num{20000}\) examples
-before working with them.
-
-My progress is available at \href{https://github.com/lduran2/CIS3715_DataScience_2022/tree/final/final}{my project repository}.
-
-\section{What has not been done}
-
-I have not started working on the preprocessing or the model yet.
-
-\section{What will be done during the following week.}
-
-I will do my best to get preprocessing out of the way and do some basic model training and testing.
-It will be an iterative process
-so I can choose the best minimal model.
 
 \newpage
 \appendix
