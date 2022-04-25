@@ -1,0 +1,68 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{makesubtitle}[2021/12/14 makesubtitle package]
+
+\RequirePackage{fancyhdr}
+
+\makeatletter
+    \newcommand*\default@titlecontainer{titlebox}
+    \DeclareOption{titlepage}{\renewcommand*\default@titlecontainer{titlepage}}
+\makeatother
+\ProcessOptions\relax
+
+\makeatletter
+    % command to define a font
+    \newcommand*\setfont[2]{%
+        \expandafter\def\csname font@#1\endcsname{#2}%
+    }
+    % default disposition font
+    \setfont{disposition}{\normalfont\bfseries}
+
+    % subtitle variable
+    \def\@subtitle{}
+    % command to set the subtitle
+    \newcommand*\subtitle[1]{%
+        \def\@subtitle{#1}%
+    }
+
+    % title containers (defined with no star to allow `\par`s)
+    % title box with plain page style
+    \newcommand\intitlebox[1]{
+        \thispagestyle{plain}%
+        #1%
+    }
+    % full page title box
+    \newcommand\intitlepage[1]{
+        \clearpage%
+        \thispagestyle{empty}%
+        \vfill\null%
+        \vskip13.75em
+        \vskip0pt
+        #1
+        \vfill\null%
+        \clearpage%
+        \addtocounter{page}{-1}%
+    }
+
+    % the maketitle composition
+    \renewcommand*\maketitle[1][\default@titlecontainer]{%
+        \expandafter\csname in#1\endcsname{
+            \null%
+            \vskip2em%
+            \begin{center}%
+                {\LARGE\font@disposition\@title}%
+                \par\vskip1em%
+                {\Large\font@disposition\@subtitle}%
+                \vskip1.5em%
+                {\large%
+                    \lineskip0.5em%
+                    \@author%
+                    \par\vskip1em%
+                    \@date%
+                }%
+            \end{center}
+            \vskip0pt%
+            \vskip0pt%
+        }
+    }
+\makeatother
+

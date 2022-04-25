@@ -1,0 +1,431 @@
+\documentclass[11pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.0in]{geometry}
+\usepackage[titlepage]{lib/makesubtitle}
+
+\title{CIS 3715 Final Project Report}
+\subtitle{Using satellite imagery to train a model for identifying the type of landmarks.}
+\author{Leomar Durán}
+\date{April 2022}
+
+% line spacing, paragraph indentation
+\usepackage{setspace}
+\singlespacing
+\setlength\parindent{0.25in}
+
+% hyperlinks
+\usepackage{hyperref}
+
+% remove level 1 margin on any list
+\usepackage[inline]{enumitem}
+\setlist[1]{leftmargin=0in}
+
+% table width, rules, row spacing
+\usepackage{tabularx}
+\usepackage{booktabs}
+\newcommand*\ra[1]{\renewcommand*\arraystretch{#1}}%
+\ra{1.27273}
+% long tables
+\usepackage{longtable}
+\usepackage{tabularray}
+\UseTblrLibrary{booktabs}
+
+% flushes heading numbers into the margin
+\usepackage{titlesec}
+\titlelabel{\llap{\thetitle\quad}}
+% remove chapter numbers from sections
+\renewcommand*\thesection{\arabic{section}}
+% reset section counter after each part
+\let\oldpart\part%
+\renewcommand*\part[1]{\oldpart{#1}\setcounter{section}0}%
+
+% for loading the bibliography
+\usepackage[%
+    style=ieee%
+]{biblatex}
+\addbibresource{main.bib}
+\defbibheading{bibliography}[\refname]{%
+  \section{#1}%
+}%
+
+% SI units, added pixels
+\usepackage[%
+    group-separator={,},%
+    per-mode=symbol%
+]{siunitx}
+\DeclareSIUnit\pixel{px}
+\DeclareSIUnit\example{examples}
+\DeclareSIUnit\channel{channels}
+\DeclareSIUnit\byte{byte}
+
+% math delimiters
+\usepackage{mathtools}%
+\DeclarePairedDelimiter\brao()%
+
+% macros for delimiters in text
+\newcommand*\DeclareTextPairedDelimiters[3]{%
+    \newcommand*#1[1]{#2##1#3}%
+}
+\DeclareTextPairedDelimiters\tbrao()%
+\DeclareTextPairedDelimiters\tbrac[]%
+\DeclareTextPairedDelimiters\tangle{\(<\)}{\(>\)}%
+
+\begin{document}
+
+\maketitle
+
+\chapter*{Revision History}
+
+\begin{tblr}[%
+    long,%
+    caption = {Revision history}%
+]{%
+    width=\linewidth,%
+    colspec={@{}rlrX@{}}%
+}
+    \toprule
+        Revision \#
+            & Author
+            & Revision date
+            & Comments
+    \\*
+    \midrule
+        2.1.0
+            & Leomar Durán
+            & 2022-04-10t23:49
+            & finished progress report I
+    \\*
+        2.0.0
+            & Leomar Durán
+            & 2022-04-06t12:30
+            & lessons learned from past work, started progress report
+    \\*
+        1.14.0
+            & Leomar Durán
+            & 2022-04-06t04:32
+            & initial time line
+    \\*
+        1.13.0
+            & Leomar Durán
+            & 2022-04-06t02:40
+            & issues with convolutional neural networks
+    \\*
+        1.12.0
+            & Leomar Durán
+            & 2022-04-05t23:10
+            & added issue of over/underfitting to related works
+    \\*
+        1.11.0
+            & Leomar Durán
+            & 2022-04-05t17:40
+            & added issue of computer vision to related works
+    \\*
+        1.10.0
+            & Leomar Durán
+            & 2022-03-25t23:57
+            & design and implementation challenges, started anticipated project outcomes and impacts
+    \\*
+        1.9.0
+            & Leomar Durán
+            & 2022-03-25t23:46
+            & data science fundamentals, project objective and constraints
+    \\*
+        1.8.0
+            & Leomar Durán
+            & 2022-03-25t22:31
+            & finished overview of problem, flush level 1 lists
+    \\*
+        1.7.0
+            & Leomar Durán
+            & 2022-03-25t22:19
+            & moved description of dataset to proposed work
+    \\*
+        1.6.0
+            & Leomar Durán
+            & 2022-03-25t22:16
+            & added revision history
+    \\*
+        1.5.0
+            & Leomar Durán
+            & 2022-03-25t21:47
+            & added more about the dataset, grammatical fixes
+    \\*
+        1.4.0
+            & Leomar Durán
+            & 2022-03-25t02:45
+            & started bibliograph, problem statement
+    \\*
+        1.3.0
+            & Leomar Durán
+            & 2022-03-25t02:10
+            & motivation, flushed heading numbers into margin
+    \\*
+        1.2.0
+            & Leomar Durán
+            & 2022-03-25t02:05
+            & sections, title, students
+    \\*
+        1.1.0
+            & Leomar Durán
+            & 2022-03-25t01:55
+            & page specifications
+    \\*
+        1.0.0
+            & Leomar Durán
+            & 2022-03-25t01:51
+            & starting proposal
+    \\*
+    \bottomrule
+\end{tblr}
+
+\part{Progress Report II}
+
+\section{What has been done}
+
+The sampling is working now.
+I can now load the datasets,
+so it will be possible to work with the sampled datasets now.
+
+\section{What has not been done}
+
+I have not started working on the preprocessing or the model yet.
+
+\section{What will be done during the following week.}
+
+I will do my best to get preprocessing out of the way and do some basic model training and testing.
+It will be an iterative process
+so I can choose the best minimal model.
+
+\part{Final Project Proposal}
+
+\section*{Project title and student names}
+\begin{itemize}
+    \item
+        \textbf{Project title:}
+        Using satellite imagery to train a model for identifying the type of landmarks.
+    \item
+        \textbf{Student names} \tbrao{\(1\)}
+        \begin{itemize}
+            \item
+                Leomar Durán
+        \end{itemize}
+\end{itemize}
+
+\section{Introduction section}
+
+\subsection{Motivation}
+
+The sciences of geomatics and land surveying interest me as hobbies.
+I really enjoy the idea of collecting data about the terrain,
+whether it be rural or urban,
+and working with that data to find solutions to problems
+or even just for fun.
+
+\subsection{The Problem}
+
+\subsubsection{Overview}
+
+An image of a terrain is given to a computer which will make a decision on the fly based on the type of terrain.
+We will train a model that will be used by the computer to identify this terrain.
+
+This sort of decision might be involved in deciding if the terrain would be appropriate for developing a building thereon.
+A preliminary sweep by a machine may save on costs of having an engineer waste time looking for land to develop.
+Another example of making this decision may be helpful for automatic landing software that will be used to safely land aircraft on stable terrain.
+A third example is that combined with time series data, we can predict different types of natural weather-related phenomena,
+such as draughts, floods and earthquakes.
+
+\subsubsection{Data science fundamentals}
+
+This problem involves multi-class classification.
+We will classify the terrain according to features such as whether the area is
+urban, densely forested, mountainous, or contains water
+for \(4\) disjoint classes.
+
+We will evaluate the results using
+accuracy, recall, precision and the F1 score.
+
+\subsubsection{Project objective and constraints}
+
+For this project, we hope to train a model to learn different \(4\) disjoint classes of terrain, and then classify a test sample.
+
+The algorithm that we pick has to deal well with the curse of dimensionality,
+as there will be
+\(
+    \SI[parse-numbers=false]{\brao{28\times28}\!}{\pixel\per\example}
+    \times \SI4{\channel\per\pixel}
+    = \SI{3136}{\channel\per\example}
+\).
+
+Ideally the solution would also perform well for multiple clases,
+but this is less of an issue than dimensionality.
+
+\subsection{Related works}
+
+One of the historical approaches to this problem is that by \textcite{Basu2015a} themselves,
+who
+used a combination of computer vision and neural networks.
+
+\textcite{IBM2020a} compares computer vision with human sight as well as artificial intelligence,
+making the analogy that computer vision is to seeing as artificial intelligence is to thinking.
+
+However, \textcite{IBM2020a} also clarifies the disadvantages of computer vision to traditional machine learning models.
+Specifically, ``\tbrac{c}omputer vision needs lots of data. It runs analyses of data over and over until it discerns distinctions and ultimately recognize images.''
+That is to say that computer vision has high time and spatial complexity.
+Because of the amounts of data required,
+it will require much storage,
+and the same compounded by the number of iterations that must be performed,
+training a computer vision model will require much more time.
+IBM explains that the scale needed for time and storage is such that few organizations have the necessary infrastructure,
+and as a result, many use a service such as IBM's to perform computer vision \cite{IBM2020a}.
+
+When it comes to neural networks,
+common issues include overfitting and underfitting%
+\cite{Vignesh2020a}\cite{Lawrence2005a}.
+Overfitting is when a model is too specific to the training data.
+As a result when the model is tested against the testing data,
+small differences can create large errors compared to the expected output%
+\cite{Gao2022a}.
+Underfitting results from a model that is too simple
+and results in high errors in comparison to the expected results
+for both testing and training data\cite{Vignesh2020a}.
+In order to avoid both, \textcite{Lawrence2005a} suggests the more complex technique of backpropagation.
+
+\textcite{Rolf2021a} provides another method of training a model on satellite data.
+Specifically, they used a hybrid system.
+First, there is a \(18\)-layer convolutional neural network\cite{MATLAB2018resnet_a}.
+However, rather than producing a single output,
+it produces \(2^{9}\) features.
+There is a second convolutional neural network with a ReLu activation function, which produces \(2^{13}\) features\cite{Rolf2021a}.
+The values are then concatenated and placed in a linear regression with a ridge regularization function\cite{Rolf2021a}.
+
+\textcite{Sharma2020a} explains the two main issues with the convolutional neural network, two of which form the basis of this model.
+One issue named are that the convolutional neural network is sensitive to variation in images,
+such as different in phase of the object being imaged,
+differences in lighting,
+and differences in positioning.
+The other issue is that convolutional neural networks are sensitive to even low levels of additive Gaussian white noise.
+% Unfortunately, without modulation and a method to demodulate the signal of the image,
+% it is very difficult to remove white noise.
+
+To satisfy what we have learned from past systems,
+we will work from the bottom up using a simpler system that will not overfit,
+iterating until we find the lowest system that will have good performance.
+This will also solve the issue of noise because this problem is complicated by overfitting.
+As for position and phase of the image, this is a much different problem to tackle and outside of the scope of this project.
+However, if the image were more more regular and you could expect a guideline,
+it could be used to properly orient the image using a rotation matrix.
+
+\section{Proposed work}
+
+We are given
+The SAT-4 airborne dataset%
+\cite{Basu2015a}.
+This data is hosted by the Louisiana State University's Division of Computer Science and Engineering%
+\footnote{%
+    \tangle{\url{http://csc.lsu.edu/~saikat/deepsat/}}%
+}
+and can be downloaded directly from the Google Drive%
+\footnote{%
+    \tangle{\url{https://drive.google.com/u/0/uc?export=download&confirm=sWVM&id=0B0Fef71_vt3PUkZ4YVZ5WWNvZWs}}%
+}
+along with the SAT-6 airborne dataset%
+, or by itself from Kaggle%
+\footnote{%
+    \tangle{\url{https://www.kaggle.com/datasets/crawford/deepsat-sat4}}%
+}%
+.
+
+The dataset consists of \(\num{400000}\) example tiles
+taken from satellite imagery originally from the National Agriculture Imagery Program \tbrao{NAIP} dataset.
+Each example has features representing the pixels of a \(\SI[parse-numbers=false]{\brao{28\times28}\!}\pixel\) image 
+multiplied by the channels for red, green, blue and near infrared \tbrao{NIR}.
+According to \textcite{Basu2015a},
+these tiles represent ``different landscapes like rural areas, urban areas, densely forested, mountainous terrain, small to large water bodies",
+so these as a disjoint set of landscapes would make for appropriate labels.
+
+Our proposed solution is a multi-class logistic regression.
+
+\subsection{Design and implementation challenges}
+
+A challenge to this solution is the size of the dataset.
+Because of its size \tbrao{about \(\SI3{\giga\byte}\)}, we expect long processing times.
+One possible solution to this challenge may be to reduce the datasize
+from \(\num{400000}\) to a more managable number such as
+\(\num{20000}\).
+
+Another issue that we will run into is deciding the best way to split the classes for the multi-class classification.
+
+\subsection{Anticipated project outcomes and impacts}
+
+An anticipated outcome is a model that can identify the types of terrains accurately from the given dataset.
+
+\section{Timeline}
+\filbreak
+{
+    \centering
+    \begin{tblr}[%
+        long,%
+        caption = {Time line}%
+    ]{%
+        width=0.8667\linewidth,%
+        colspec={@{}Xl@{}}%
+    }
+    \toprule
+        Objective & Due Date
+    \\*
+    \midrule
+        data set research & 2022-03-24
+    \\*
+        initial proposal & 2022-03-25
+    \\*
+        proposal revising & 2022-04-06
+    \\*
+        initial data understanding, visualization & 2022-04-06
+    \\*
+        progress report I revising & 2022-04-06
+    \\*
+        pre-processing of data & 2022-04-08
+    \\*
+        progress report II & 2022-04-09
+    \\*
+        experimenting with logistic regression hyper parameters & 2022-04-15
+    \\*
+        lightning talks & 2022-04-19
+    \\*
+        revising presentation of results & 2022-04-22
+    \\*
+        working on final report & 2022-04-23
+    \\*
+        \(\prime\prime\)& 2022-04-24
+    \\*
+    \bottomrule
+    \end{tblr}
+}
+\newpage
+
+\printbibliography
+
+\part{Progress Report I}
+
+\section{What has been done}
+
+I have mostly been working on the sampling.
+Because of the limitations of my computer,
+I cannot load the entire dataset into memory and perform operations on it.
+As a result,
+I will instead sample both datasets into \(\num{20000}\) examples
+before working with them.
+
+My progress is available at \href{https://github.com/lduran2/CIS3715_DataScience_2022/tree/final/final}{my project repository}.
+
+\section{What has not been done}
+
+I have not started working on the preprocessing or the model yet.
+
+\section{What will be done during the following week.}
+
+I will do my best to get preprocessing out of the way and do some basic model training and testing.
+It will be an iterative process
+so I can choose the best minimal model.
+
+\end{document}
