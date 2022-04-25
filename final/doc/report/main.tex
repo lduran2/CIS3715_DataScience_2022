@@ -8,6 +8,10 @@
 \author{Leomar Durán}
 \date{April 2022}
 
+% for the Jupyter notebook
+\usepackage{lib/ipynb}
+\usepackage{minted}
+
 % line spacing, paragraph indentation
 \usepackage{setspace}
 \singlespacing
@@ -20,6 +24,8 @@
 \usepackage[inline]{enumitem}
 \setlist[1]{leftmargin=0in}
 
+% non-floating figures and tables
+\usepackage{lib/nonfloatenvirons}
 % table width, rules, row spacing
 \usepackage{tabularx}
 \usepackage{booktabs}
@@ -35,6 +41,9 @@
 \titlelabel{\llap{\thetitle\quad}}
 % remove chapter numbers from sections
 \renewcommand*\thesection{\arabic{section}}
+% reset section counter after each part
+\let\oldpart\part%
+\renewcommand*\part[1]{\oldpart{#1}\setcounter{section}0}%
 
 % for loading the bibliography
 \usepackage[%
@@ -42,7 +51,7 @@
 ]{biblatex}
 \addbibresource{main.bib}
 \defbibheading{bibliography}[\refname]{%
-  \section{#1}%
+  \section{Acknowledgements}%
 }%
 
 % SI units, added pixels
@@ -58,6 +67,8 @@
 % math delimiters
 \usepackage{mathtools}%
 \DeclarePairedDelimiter\brao()%
+\DeclarePairedDelimiter\brac[]%
+\DeclarePairedDelimiter\angl<>%
 
 % macros for delimiters in text
 \newcommand*\DeclareTextPairedDelimiters[3]{%
@@ -71,108 +82,7 @@
 
 \maketitle
 
-\chapter*{Revision History}
-
-\begin{tblr}[%
-    long,%
-    caption = {Revision history}%
-]{%
-    width=\linewidth,%
-    colspec={@{}rlrX@{}}%
-}
-    \toprule
-        Revision \#
-            & Author
-            & Revision date
-            & Comments
-    \\*
-    \midrule
-        2.0.0
-            & Leomar Durán
-            & 2022-04-06t12:30
-            & lessons learned from past work, started progress report
-    \\*
-        1.14.0
-            & Leomar Durán
-            & 2022-04-06t04:32
-            & initial time line
-    \\*
-        1.13.0
-            & Leomar Durán
-            & 2022-04-06t02:40
-            & issues with convolutional neural networks
-    \\*
-        1.12.0
-            & Leomar Durán
-            & 2022-04-05t23:10
-            & added issue of over/underfitting to related works
-    \\*
-        1.11.0
-            & Leomar Durán
-            & 2022-04-05t17:40
-            & added issue of computer vision to related works
-    \\*
-        1.10.0
-            & Leomar Durán
-            & 2022-03-25t23:57
-            & design and implementation challenges, started anticipated project outcomes and impacts
-    \\*
-        1.9.0
-            & Leomar Durán
-            & 2022-03-25t23:46
-            & data science fundamentals, project objective and constraints
-    \\*
-        1.8.0
-            & Leomar Durán
-            & 2022-03-25t22:31
-            & finished overview of problem, flush level 1 lists
-    \\*
-        1.7.0
-            & Leomar Durán
-            & 2022-03-25t22:19
-            & moved description of dataset to proposed work
-    \\*
-        1.6.0
-            & Leomar Durán
-            & 2022-03-25t22:16
-            & added revision history
-    \\*
-        1.5.0
-            & Leomar Durán
-            & 2022-03-25t21:47
-            & added more about the dataset, grammatical fixes
-    \\*
-        1.4.0
-            & Leomar Durán
-            & 2022-03-25t02:45
-            & started bibliograph, problem statement
-    \\*
-        1.3.0
-            & Leomar Durán
-            & 2022-03-25t02:10
-            & motivation, flushed heading numbers into margin
-    \\*
-        1.2.0
-            & Leomar Durán
-            & 2022-03-25t02:05
-            & sections, title, students
-    \\*
-        1.1.0
-            & Leomar Durán
-            & 2022-03-25t01:55
-            & page specifications
-    \\*
-        1.0.0
-            & Leomar Durán
-            & 2022-03-25t01:51
-            & starting proposal
-    \\*
-    \bottomrule
-\end{tblr}
-
-\part{Progress Report I}
-
-\part{Final Project Proposal}
+\part{Final Report}
 
 \section*{Project title and student names}
 \begin{itemize}
@@ -207,14 +117,17 @@ We will train a model that will be used by the computer to identify this terrain
 This sort of decision might be involved in deciding if the terrain would be appropriate for developing a building thereon.
 A preliminary sweep by a machine may save on costs of having an engineer waste time looking for land to develop.
 Another example of making this decision may be helpful for automatic landing software that will be used to safely land aircraft on stable terrain.
-A third example is that combined with time series data, we can predict different types of natural weather-related phenomena,
+A third example is that combined with time series data, we can predict different types
+of weather-related and other natural phenomena,
 such as draughts, floods and earthquakes.
+The rain shadow affect is an important scenario where terrain plays a major role in weather.
 
 \subsubsection{Data science fundamentals}
 
-This problem involves multi-class classification.
+This problem involves multi-class classification
+using the linear and ridge regressions specifically.
 We will classify the terrain according to features such as whether the area is
-urban, densely forested, mountainous, or contains water
+barren land, forested land (trees), grassland, and land with no special features
 for \(4\) disjoint classes.
 
 We will evaluate the results using
@@ -235,7 +148,7 @@ as there will be
 Ideally the solution would also perform well for multiple clases,
 but this is less of an issue than dimensionality.
 
-\subsection{Related works}
+\subsection{Related works}\label{ssc:related works}
 
 One of the historical approaches to this problem is that by \textcite{Basu2015a} themselves,
 who
@@ -252,7 +165,7 @@ it will require much storage,
 and the same compounded by the number of iterations that must be performed,
 training a computer vision model will require much more time.
 IBM explains that the scale needed for time and storage is such that few organizations have the necessary infrastructure,
-and as a result, many use a service such as IBM's to perform computer vision \cite{IBM2020a}.
+and as a result, many use a service such as IBM's to perform computer vision\cite{IBM2020a}.
 
 When it comes to neural networks,
 common issues include overfitting and underfitting%
@@ -291,7 +204,22 @@ As for position and phase of the image, this is a much different problem to tack
 However, if the image were more more regular and you could expect a guideline,
 it could be used to properly orient the image using a rotation matrix.
 
-\section{Proposed work}
+\section{Approach}
+
+
+
+\subsection{Idea}
+
+Our primary idea is that we want to avoid overfitting or complex models.
+As explained in \ref{ssc:related works},
+overfitting is a very common issue with neural networks,
+which is usually resolved through backpropagation.
+However, we want to avoid complexity where possible.
+This will be our primary motivator in starting from the ground up.
+
+Our progress is also available at \href{https://github.com/lduran2/CIS3715_DataScience_2022/tree/final/final}{the project repository}.
+
+\subsection{Proposed work}
 
 We are given
 The SAT-4 airborne dataset%
@@ -313,15 +241,27 @@ along with the SAT-6 airborne dataset%
 
 The dataset consists of \(\num{400000}\) example tiles
 taken from satellite imagery originally from the National Agriculture Imagery Program \tbrao{NAIP} dataset.
-Each sample has features representing the pixels of a \(\SI[parse-numbers=false]{\brao{28\times28}\!}\pixel\) image 
+Each example has features representing the pixels of a \(\SI[parse-numbers=false]{\brao{28\times28}\!}\pixel\) image 
 multiplied by the channels for red, green, blue and near infrared \tbrao{NIR}.
 According to \textcite{Basu2015a},
 these tiles represent ``different landscapes like rural areas, urban areas, densely forested, mountainous terrain, small to large water bodies",
 so these as a disjoint set of landscapes would make for appropriate labels.
 
 Our proposed solution is a multi-class logistic regression.
+However, we intended to work from the ground up
+starting with linear regression
+and testing until we found something that worked good enough
+without overfitting
+as was a worry in past works.
+However, we had an issue with logistic regression.
 
-\subsection{Design and implementation challenges}
+This issue is that since the dataset has multiple classes,
+the specific encoding that was used in the data for those classes was one-hot encoding.
+Thus the labels were vectors.
+However, the \mintinline{python}{scikit-learn} package's logistic regression is designed to work specifically with scalar labels.
+Because of this the ridge regression seemed like the last more natural choice for this dataset.
+
+\subsubsection{Design and implementation challenges}
 
 A challenge to this solution is the size of the dataset.
 Because of its size \tbrao{about \(\SI3{\giga\byte}\)}, we expect long processing times.
@@ -331,54 +271,309 @@ from \(\num{400000}\) to a more managable number such as
 
 Another issue that we will run into is deciding the best way to split the classes for the multi-class classification.
 
-\subsection{Anticipated project outcomes and impacts}
+\subsubsection{Anticipated project outcomes and impacts}
 
 An anticipated outcome is a model that can identify the types of terrains accurately from the given dataset.
 
-\section{Timeline}
-\filbreak
-{
+\section{Results}
+
+\begin{figure}
     \centering
-    \begin{tblr}[%
-        long,%
-        caption = {Time line}%
-    ]{%
-        width=0.8667\linewidth,%
-        colspec={@{}Xl@{}}%
-    }
-    \toprule
-        Objective & Due Date
-    \\*
-    \midrule
-        data set research & 2022-03-24
-    \\*
-        initial proposal & 2022-03-25
-    \\*
-        proposal revising & 2022-04-06
-    \\*
-        initial data understanding, visualization & 2022-04-06
-    \\*
-        progress report I revising & 2022-04-06
-    \\*
-        pre-processing of data & 2022-04-08
-    \\*
-        progress report II & 2022-04-09
-    \\*
-        experimenting with logistic regression hyper parameters & 2022-04-15
-    \\*
-        lightning talks & 2022-04-19
-    \\*
-        revising presentation of results & 2022-04-22
-    \\*
-        working on final report & 2022-04-23
-    \\*
-        \(\prime\prime\)& 2022-04-04
-    \\*
-    \bottomrule
-    \end{tblr}
-}
-\newpage
+    \includegraphics[width=0.75\linewidth]{ipynb/output_44_0.png}
+    \caption{The weights including bias learned.}
+    \label{fig:weights}
+\end{figure}
+
+Fig. \ref{fig:weights} shows the weights that were learned.
+The bias is most important in this model.
+Most of the weights are equally important,
+but there are a few that are more important,
+and many more that are not very important and could be reduced.
+I did not perform any feature reduction however.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{ipynb/output_52_1.png}
+    \caption{Bar plot of the multiplicities of the classes in ground truth and prediction.}
+    \label{fig:multiplicity bar plot}
+\end{figure}
+
+In Fig. {fig:multiplicity bar plot}, we see a visual representation of the multiplicities of the terrain type classes.
+It seems like a close fit.
+However, all this is, is a visual representation of a count of each of the classes.
+
+\begin{table}[]
+    \centering
+    \[
+        \begin{array}{@{}llS[round-mode=figures,round-precision=4]@{}}
+        \toprule
+            \text{dividend} & \text{divisor} & \text{quotient}
+        \\*
+        \midrule
+            \text{MAE train} & \text{MAE test}
+            & 0.836726
+        \\*
+            \text{RMSE train} & \text{RMSE test}
+            & 0.843065
+        \\*
+        \midrule
+            \text{MAE test} & \text{MAD train}
+            & 0.761874
+        \\*
+            \text{RMSE test} & \text{\(\sigma\) train}
+            & 0.735807
+        \\*
+        \bottomrule
+        \end{array}
+    \]
+    \caption{Error ratios.}
+    \label{tab:error ratios}
+\end{table}
+
+Table \ref{tab:error ratios} shows us the results of the linear regression in numbers.
+Specifically,
+we found that the linear regression was slightly overfit by the two error ratios of \(\num{0.8367}\) and \(\num{0.8431}\).
+These represent an overfit because the errors of the training are less than the errors against the test data.
+Thus the ratio is less than \(1\).
+
+This table also shows us that the mean absolute error is at about \(0.76\) mean absolute deviations around the median
+and that the root mean square error is at about \(0.74\) standard deviations,
+which mean that the model has a moderate predictive power since it is close to \(1\).
+
+In their normal forms, mean absolute error and root mean square error give us a measure of the predictive power of the model\cite{rms2016}.
+Then
+we can use these last two normalizations because the more familiar standard deviation is also known as the root mean square.
+In fact, the root mean square error is the same formula as the root mean square,
+but using the corresponding predicted value for each label instead of the mean.
+Likewise we use the mean absolute deviation about the median to normalize the mean absolute error.
+
+\begin{table}[]
+    \centering
+    \[
+        \begin{array}{@{}SS[round-mode=figures,round-precision=4]l*4{S[round-mode=figures,round-precision=5,group-separator={\,}]}}
+        \toprule
+            \multicolumn{2}{@{}l}{\text{regularization \(\lambda\)}}
+            & \phantom{abc}
+            & \text{accuracy}
+            & \text{recall}
+            & \text{precision}
+            & \text{\(F_1\) score}
+        \\*
+        \cmidrule{1-2}
+            \brac*{\si{\deci\bel}}
+            &
+            \angl{1}
+        \\*
+        \midrule
+            \text{none} &
+                && 0.58665
+                & 0.4493992231017458
+                & 0.6065020921872838
+                & 0.5036355376125148
+        \\*
+        \midrule
+            -10 & 0.31622776601683794
+                && 0.58715
+                & 0.44922446696412854
+                & 0.6075849506159723
+                & 0.5037411510816644
+        \\*
+            -9 & 0.35481338923357547
+                && 0.5872
+                & 0.4492886435781704
+                & 0.6077762406861051
+                & 0.5038066425016782
+        \\*
+            -8 & 0.3981071705534972
+                && 0.5873
+                & 0.4494337852962524
+                & 0.607844995207374
+                & 0.5039229368765102
+        \\*
+            -7 & 0.44668359215096315
+                && 0.58735
+                & 0.4493528201922122
+                & 0.6079392009526936
+                & 0.5038767122931914
+        \\*
+            -6 & 0.5011872336272722
+                && 0.58735
+                & 0.449271855088172
+                & 0.6079398509472012
+                & 0.5038157451076203
+        \\*
+        \midrule
+            -5 & 0.5623413251903491
+                && 0.58755
+                & 0.4490842730210176
+                & 0.6081144087457719
+                & 0.5036484574642933
+        \\*
+            -4 & 0.6309573444801932
+                && 0.5876
+                & 0.4490842730210176
+                & 0.6083680618451495
+                & 0.503697137969315
+        \\*
+            -3 & 0.7079457843841379
+                && 0.58735
+                & 0.4486370071517444
+                & 0.6078782887164116
+                & 0.5031616356837981
+        \\*
+            -2 & 0.7943282347242815
+                && 0.58745
+                & 0.44885028804432964
+                & 0.6078626211036924
+                & 0.5032986730138832
+        \\*
+            -1 & 0.8912509381337456
+                && 0.58755
+                & 0.4486755319067122
+                & 0.60803368099758
+                & 0.5031846728113596
+        \\*
+        \midrule
+            0 & 1.0
+                && 0.58775
+                & 0.44873970852075407
+                & 0.6086427593859304
+                & 0.5033432141352383
+        \\*
+        \midrule
+            1 & 1.1220184543019633
+                && 0.58775
+                & 0.4485649523831367
+                & 0.6086225636833118
+                & 0.5032103547844932
+        \\*
+            2 & 1.2589254117941673
+                && 0.588
+                & 0.448872024309299
+                & 0.6090748139440184
+                & 0.5035466488795411
+        \\*
+            3 & 1.4125375446227544
+                && 0.5881
+                & 0.44869726817168165
+                & 0.6095694906461742
+                & 0.5035110328600362
+        \\*
+            4 & 1.5848931924611136
+                && 0.5885
+                & 0.4487782332757218
+                & 0.6104109099997941
+                & 0.5037766968830625
+        \\*
+            5 & 1.7782794100389228
+                && 0.5885
+                & 0.44852251203406435
+                & 0.6107817976750681
+                & 0.5036020810947259
+        \\*
+        \midrule
+            6 & 1.9952623149688795
+                && 0.58845
+                & 0.44817299975882957
+                & 0.6107110409285051
+                & 0.5032615372821362
+        \\*
+            7 & 2.2387211385683394
+                && 0.58855
+                & 0.44798541769167527
+                & 0.6107363934997151
+                & 0.5030861896774851
+        \\*
+            8 & 2.51188643150958
+                && 0.58875
+                & 0.44798541769167527
+                & 0.6113871721572975
+                & 0.5032827113710475
+        \\*
+            9 & 2.8183829312644537
+                && 0.5891
+                & 0.44790445258763506
+                & 0.6122752617389601
+                & 0.5034322630651811
+        \\*
+            10 & 3.1622776601683795
+                && 0.58925
+                & 0.4479094003626063
+                & 0.6123493532783794
+                & 0.5033598847989803
+        \\*
+        \bottomrule
+        \end{array}
+    \]
+    \caption{Scores with different values of the regularization hyperparameter \(\lambda\).}
+    \label{tab:regularizations scores}
+\end{table}
+
+Table \ref{tab:regularizations scores} shows us
+the scores for the different regularization hyperparameters \(\lambda\) of a ridge regression
+with the first being the original linear regression with no regularization. The models have somewhat bad recall with moderately fair precision. A visiual representation is provided by Fig.\ref{fig:precision vs recall}  below.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{ipynb/output_67_0.png}
+    \caption{Precision versus recall by regularization hyperparameter \(\lambda\) with linear regression as a disc.}
+    \label{fig:precision vs recall}
+\end{figure}
+
+Hyperparameter
+\(\lambda = \SI{-8}{\deci\bel} = 0.3981\)
+the \(F_1\) score%
+, representing the harmonic mean of recall and precision,
+maximizes at \(F_1 = \num[group-separator={\,}]{0.50392}\).
+
+\section{Conclusion}
+
+Overall, the project was not as successful as I had planned.
+The ridge regressions gave very low recall and a somewhat low precision.
+
+I believe that the two issues that gave me the most difficulty were
+the large number of examples (\(\num{400000}\))
+and the labels which were each a \(4\)-vector one-hot encoded.
+
+The sampling program took a while to write because of the memory issues,
+and because I was having a hard time keeping up with other classes,
+which I neglected the project as a result.
+
+As for the one-hot encoding,
+I was not sure how best to handle it.
+I considered after the project that label or ordinal encoding may be options.
+However that carries with it the connotation of ranking,
+which I'm not sure how the terrain type would rank,
+and it may depend on application,
+which is outside the scope of this project.
+
+It may have also been interesting to attempt clustering
+to see if the examples fit the labels provided,
+or even if \(4\) labels was the optimal number.
+
+As for the outcomes,
+I believe that we were able to prove that a somewhat reliable model is possible
+without resorting to computer vision
+or a neural network (convolutional or otherwise).
+I also got to learn many new techniques, to teach myself features of \mintinline{python}{pandas} and \mintinline{python}{sklearn} with which I was not familiar,
+and to explore the limits of those with which that I am familiar.
 
 \printbibliography
+
+\newpage
+\appendix
+\title{CIS 3715 Final Project Report Appendix}
+
+\maketitle
+
+\part{Jupyter notebook of the project}
+\graphicspath{{ipynb/}}
+\input{ipynb/final_project_on_sat4_doc}
+
+\part{Sampling script}
+\inputminted{python}{src/sample_dataset.py}
+
+\part{Command-query separated iterator}
+\inputminted{python}{src/cqs_iter.py}
 
 \end{document}
